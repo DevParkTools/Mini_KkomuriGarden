@@ -77,6 +77,20 @@ html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;overscroll-b
 .dscroll{display:flex;gap:.4em;overflow-x:auto;touch-action:pan-x;padding:.3em 0}
 #scAd{background:linear-gradient(135deg,#3a1d6e,#c0388a,#ff9d3d);background-size:300% 300%;animation:adbg 4s ease infinite;z-index:5}
 @keyframes adbg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.screen#scTitle{background:linear-gradient(180deg,rgba(5,12,11,.62),rgba(5,12,11,.18) 42%,rgba(5,12,11,.88));gap:.7em}
+.tEyebrow{letter-spacing:.38em;font-size:.72em;opacity:.8;font-weight:700;color:#f6d98a}
+.logo.big{font-size:min(4.4em,14vw);letter-spacing:.1em;padding-left:.1em;background:linear-gradient(#fffbe6,#f6c453 58%,#b9791a);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 .4em rgba(255,200,90,.38)) drop-shadow(0 .08em 0 rgba(0,0,0,.5));animation:none}
+.tRule{width:min(15em,52%);height:2px;background:linear-gradient(90deg,transparent,#f6c453,transparent)}
+.tcol{display:flex;flex-direction:column;align-items:center;gap:.7em;width:100%}
+.tVer{position:absolute;bottom:calc(var(--sab) + .6em);font-size:.7em;opacity:.5;letter-spacing:.2em}
+#slotList{display:flex;flex-direction:column;gap:.5em;width:min(92vw,30em)}
+.slot{display:flex;align-items:stretch;gap:.4em}
+.slotMain{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:.15em;text-align:left;min-height:max(56px,4.4em);padding:.55em .9em;border-radius:1em;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:var(--text);font:inherit;cursor:pointer;touch-action:manipulation}
+.slotMain b{font-size:1.05em}.slotMain span{font-size:.8em;opacity:.85}
+.slot.cur .slotMain{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+.slotDel{min-width:max(48px,3.4em);padding:0 .6em}
+#buffs{position:absolute;right:calc(var(--sar) + .6em);top:calc(var(--sat) + 4.4em);display:flex;flex-direction:column;gap:.35em;align-items:flex-end}
+#buffs .btn{pointer-events:auto}
 .setrow{display:flex;align-items:center;gap:.5em;padding:.2em 0;border-bottom:1px solid rgba(255,255,255,.1);min-height:max(48px,3em)}
 .setrow>span{flex:1;font-weight:700}
 .setrow input[type=range]{flex:1.3;min-width:0;min-height:max(48px,3em);accent-color:var(--acc)}
@@ -127,6 +141,7 @@ window.addEventListener('unhandledrejection',function(ev){window.__fatal((ev.rea
 </div>
 <div id="topR"><button class="btn tool" id="btnFs"><b>⛶</b></button><button class="btn tool" id="btnPause"><b>⏸</b></button></div>
 <div id="zoneTabs"></div>
+<div id="buffs"></div>
 <div id="hint" class="hidden"></div>
 <div id="toasts"></div>
 <div id="bar">
@@ -135,9 +150,11 @@ window.addEventListener('unhandledrejection',function(ev){window.__fatal((ev.rea
 <button class="btn tool" id="btnGather"><b>📣</b><span data-t="모여라|Gather"></span></button>
 <button class="btn tool" id="btnDeco"><b>🪴</b><span data-t="꾸미기|Decor"></span></button>
 <button class="btn tool" id="btnDex"><b>📖</b><span data-t="도감|Dex"></span></button>
+<button class="btn tool" id="btnBook"><b>📒</b><span data-t="수첩|Notes"></span></button>
 </div>
 <div id="cPanel" class="panel hidden">
 <div class="ptop"><b id="cName"></b><span class="tag" id="cStage"></span><button class="btn tool" id="cClose"><b>✕</b></button></div>
+<div class="sub" id="cSay" style="font-size:.85em;margin:.15em 0;min-height:1.2em"></div>
 <div class="bar mood"><i id="cMood"></i></div>
 <div class="bar love"><i id="cLove"></i></div>
 <div class="evo" id="cEvo"></div>
@@ -150,13 +167,23 @@ window.addEventListener('unhandledrejection',function(ev){window.__fatal((ev.rea
 <div id="flash"></div>
 <div id="fade"></div>
 <div id="dbg" class="hidden"></div>
-<div id="scIntro" class="screen hidden"><div class="logo" data-t="꼬물이 정원|Kkomuri Garden"></div><div class="sub" data-t="탭하면 스킵 ㅋㅋ|Tap to skip lol"></div></div>
+<div id="scIntro" class="screen hidden"><div class="logo" data-t="꼬물이 정원|Kkomuri Garden"></div><div class="sub" data-t="탭하여 건너뛰기|Tap to skip"></div></div>
 <div id="scTitle" class="screen hidden">
-<div class="logo" data-t="꼬물이 정원|Kkomuri Garden"></div>
+<div class="tEyebrow" data-t="작은 생명체 수집 · 육성|Collect · Raise · Garden"></div>
+<div class="logo big" data-t="꼬물이 정원|Kkomuri Garden"></div>
+<div class="tRule"></div>
 <div class="sub" id="titleSub"></div>
+<div id="titleMain" class="tcol">
 <div class="sub" id="titleKeys" style="font-size:.85em"></div>
-<button class="btn main" id="btnStart" style="font-size:1.4em;min-width:9em"><span data-t="정원 입장|Enter Garden"></span></button>
+<button class="btn main" id="btnStart" style="font-size:1.35em;min-width:9em"><span data-t="시작하기|Start"></span></button>
 <div class="row" style="justify-content:center"><button class="btn" id="btnSetTitle"><span data-t="⚙ 설정|⚙ Settings"></span></button><button class="btn" id="btnKeysTitle"><span data-t="⌨ 단축키|⌨ Keys"></span></button></div>
+</div>
+<div id="slotBox" class="tcol hidden">
+<div class="sub" data-t="세이브 슬롯을 선택하세요|Choose a save slot"></div>
+<div id="slotList"></div>
+<button class="btn" id="btnSlotBack"><span data-t="뒤로|Back"></span></button>
+</div>
+<div class="tVer">v1.1</div>
 </div>
 <div id="scPause" class="screen hidden">
 <div class="logo" style="font-size:2.2em" data-t="일시정지|Paused"></div>
@@ -166,13 +193,14 @@ window.addEventListener('unhandledrejection',function(ev){window.__fatal((ev.rea
 </div>
 <div id="scResult" class="screen hidden"><div class="card" id="resultCard"></div></div>
 <div id="scModal" class="screen hidden"><div class="card" id="modalCard"></div></div>
-<div id="scAd" class="screen hidden"><div class="logo" style="font-size:1.6em">📺 AD</div><div id="adTitle" class="sub"></div><div id="adCount" style="font-size:3em;font-weight:900"></div><button class="btn hidden" id="adGive" style="min-width:10em"><span data-t="보상 받기 ✔|Claim ✔"></span></button><button class="btn" id="adSkip" style="position:absolute;left:66%;top:14%;min-width:7em"><span>건너뛰기</span></button><button class="btn" id="adQuit" style="position:absolute;left:1em;bottom:1em"><span data-t="안 볼래|No thanks"></span></button></div>
+<div id="scAd" class="screen hidden"><div class="logo" style="font-size:1.6em">📺 AD</div><div id="adTitle" class="sub"></div><div id="adCount" style="font-size:3em;font-weight:900"></div><button class="btn hidden" id="adGive" style="min-width:10em"><span data-t="보상 받기 ✔|Claim ✔"></span></button><button class="btn" id="adSkip" style="position:absolute;left:66%;top:14%;min-width:7em"><span>건너뛰기</span></button><button class="btn" id="adQuit" style="position:absolute;left:1em;bottom:1em"><span data-t="닫기|No thanks"></span></button></div>
 </div>
 </div>
-<div id="err" style="display:none"><div style="font-size:3em">😵</div><div data-t="">앗, 꼬물이가 코드를 씹어먹음 ㅋㅋ</div><div id="errMsg" style="opacity:.8;font-size:.85em;word-break:break-all"></div><button onclick="location.reload()">다시 시작 / Restart</button></div>
+<div id="err" style="display:none"><div style="font-size:3em">😵</div><div data-t="">오류가 발생했습니다. 꼬물이가 코드를 씹은 것으로 추정됩니다.</div><div id="errMsg" style="opacity:.8;font-size:.85em;word-break:break-all"></div><button onclick="location.reload()">다시 시작 / Restart</button></div>
 <script type="module" onerror="window.__fatal('three.module.min.js 로드 실패: 같은 폴더에 파일을 두고 웹서버(깃허브 Pages 등)로 열어줘')">
 const CONFIG={
-save:{key:'kkomuri_garden_save',ver:1,autoSec:8},
+save:{key:'kkomuri_garden_save',ver:1,autoSec:8,slots:3,slotKey:['kkomuri_garden_save','kkomuri_garden_save_2','kkomuri_garden_save_3'],lastKey:'kkomuri_garden_slot'},
+content:{eventGap:[80,140],rain:{t:60,m:1.5},fest:{t:30,m:2},snackHun:35,meteorLife:20,meteorSeeds:[1,2],upCost:[[150,1.6],[200,1.7],[180,1.6],[160,1.6]],upMax:[8,6,6,6],upEff:[0.08,3600,0.07,0.08],missionCount:10},
 boot:{introSec:2.4},
 render:{maxPR:2,minPR:0.5,prStep:0.1,checkSec:1.5,lowRatio:0.82,highRatio:0.97,dropAfter:2,raiseAfter:6,maxDt:0.1,fixedDt:1/60,maxSteps:5,hudHz:6,bg:0x14281d},
 cam:{yaw:45,pitch:35,dist:80,near:1,far:300,minH:11.5,minW:11.5,follow:4,zoomMin:0.7,zoomMax:1.5,zoomWheel:0.0012,evoZoom:1.7,limitFrac:0.55,zoomDamp:5},
@@ -197,7 +225,7 @@ lights:{dayHemi:0.75,nightHemi:0.3,daySun:1.1,nightSun:0.12,sunDist:30},
 ui:{unitDiv:26,unitMin:11,unitMax:26,minTouch:48,joyDead:0.12,joyRange:3.2,tapMove:12,tapMs:550,dblTapMs:320},
 audio:{voices:10,bgmGain:0.5,tickMs:120,ahead:0.35,dayBpm:96,nightBpm:68},
 fx2:{fireflies:26},
-decor:{cap:18,maxBonus:0.6},
+decor:{cap:24,maxBonus:0.75},
 visitor:{firstSec:55,interval:[70,130],stay:[28,40],speed:1.4,rewards:[{gold:150,seeds:3},{gold:200,food:3,toy:2},{gold:400,seeds:8}]},
 gather:{dur:6,cooldown:18,zoom:1.25,perRing:6,r0:1.7,rStep:1.1,speed:3,love:2,goldPer:6},
 dex:{canvas:320,rotSens:0.012,milestones:[{n:15,g:300,s:2},{n:50,g:1000,s:5},{n:100,g:3000,s:10},{n:150,g:10000,s:30}]},
@@ -254,12 +282,18 @@ const DECOR=[
 {e:'🍄',ko:'버섯 의자',en:'Mushroom Stool',price:50,gem:0,bonus:0.02,r:0.45},
 {e:'🎡',ko:'바람개비 탑',en:'Windmill',price:200,gem:0,bonus:0.08,r:0.8},
 {e:'🛋️',ko:'푹신 방석',en:'Cushion',price:35,gem:0,bonus:0.01,r:0.5},
-{e:'🌟',ko:'별 조형물',en:'Star Statue',price:0,gem:6,bonus:0.1,r:0.6}
+{e:'🌟',ko:'별 조형물',en:'Star Statue',price:0,gem:6,bonus:0.1,r:0.6},
+{e:'🪨',ko:'정원석',en:'Garden Rock',price:25,gem:0,bonus:0.01,r:0.5},
+{e:'🌸',ko:'꽃 아치',en:'Flower Arch',price:90,gem:0,bonus:0.04,r:0.9},
+{e:'☕',ko:'찻상',en:'Tea Table',price:70,gem:0,bonus:0.03,r:0.6},
+{e:'🔥',ko:'모닥불',en:'Campfire',price:110,gem:0,bonus:0.05,r:0.6},
+{e:'🎈',ko:'풍선 기둥',en:'Balloon Post',price:160,gem:0,bonus:0.07,r:0.5},
+{e:'🥚',ko:'황금 알 조형물',en:'Golden Egg Statue',price:0,gem:10,bonus:0.14,r:0.6}
 ];
 const VISITORS=[{ko:'반짝 구름양',en:'Glim Cloud Lamb'},{ko:'심야 두더지 상인',en:'Midnight Mole Merchant'},{ko:'무지개 달팽이',en:'Rainbow Snail'}];
 const spName=(sp,st)=>(LANG==='ko'?NAMES_KO:NAMES_EN)[sp][st];
 
-const defSave=()=>({v:CONFIG.save.ver,t:Date.now(),gold:CONFIG.econ.startGold,seeds:CONFIG.econ.startSeeds,xp:0,lv:1,food:[2,0,0,0,0],toy:[0,0,0,0],zones:[true,false,false],cr:[],eggs:[],uid:1,tut:0,ach:{},stat:{harvest:0,hatch:0,evo:0,feed:0,play:0,tap:0,earned:0,gather:0,visit:0,deco:0,ad:0},dex:{},decor:[],vis:[0,0,0],daily:{last:'',streak:0},dexClaim:{},lost:[],tod:CONFIG.time.start,zone:0});
+const defSave=()=>({v:CONFIG.save.ver,t:Date.now(),gold:CONFIG.econ.startGold,seeds:CONFIG.econ.startSeeds,xp:0,lv:1,food:[2,0,0,0,0],toy:[0,0,0,0],zones:[true,false,false],cr:[],eggs:[],uid:1,tut:0,ach:{},stat:{harvest:0,hatch:0,evo:0,feed:0,play:0,tap:0,earned:0,gather:0,visit:0,deco:0,ad:0,mission:0,event:0,up:0},dex:{},decor:[],vis:[0,0,0],daily:{last:'',streak:0},dexClaim:{},lost:[],tod:CONFIG.time.start,zone:0,dm:{k:'',pick:[],cl:[0,0,0],bonus:0,base:{}},up:[0,0,0,0]});
 const num=(x,d,a,b)=>{x=Number(x);return Number.isFinite(x)?clamp(x,a,b):d;};
 function cleanCr(c){
 if(!c||typeof c!=='object')return null;
@@ -276,10 +310,12 @@ if(Array.isArray(raw.toy))for(let i=0;i<4;i++)s.toy[i]=Math.floor(num(raw.toy[i]
 if(Array.isArray(raw.zones))for(let i=0;i<3;i++)s.zones[i]=i===0||raw.zones[i]===true;
 s.uid=Math.floor(num(raw.uid,1,1,1e9));s.tut=Math.floor(num(raw.tut,0,0,9));s.tod=num(raw.tod,d.tod,0,1);s.zone=Math.floor(num(raw.zone,0,0,2));
 if(!s.zones[s.zone])s.zone=0;
+if(Array.isArray(raw.up))for(let i=0;i<4;i++)s.up[i]=Math.floor(num(raw.up[i],0,0,CONFIG.content.upMax[i]));
+if(raw.dm&&typeof raw.dm==='object'&&typeof raw.dm.k==='string'&&Array.isArray(raw.dm.pick)&&raw.dm.pick.length===3){const m=raw.dm;s.dm.k=m.k.slice(0,12);s.dm.pick=m.pick.map(x=>Math.floor(num(x,0,0,CONFIG.content.missionCount-1)));for(let i=0;i<3;i++)s.dm.cl[i]=Array.isArray(m.cl)&&m.cl[i]===1?1:0;s.dm.bonus=m.bonus===1?1:0;for(const q in s.stat)s.dm.base[q]=num(m.base&&m.base[q],0,0,1e12);}
 if(raw.ach&&typeof raw.ach==='object')for(const k in raw.ach)if(raw.ach[k]===1)s.ach[k]=1;
 if(raw.stat&&typeof raw.stat==='object')for(const k in s.stat)s.stat[k]=num(raw.stat[k],0,0,1e12);
 if(raw.dex&&typeof raw.dex==='object')for(const k in raw.dex){const n=Number(k);if(Number.isInteger(n)&&n>=0&&n<SPN*8&&raw.dex[k]===1)s.dex[n]=1;}
-if(Array.isArray(raw.decor))for(const d of raw.decor){if(!d||typeof d!=='object')continue;const t=Math.floor(num(d.t,-1,-1,99));if(t<0||t>=DECOR.length)continue;if(s.decor.length>=60)break;s.decor.push({t,zone:Math.floor(num(d.zone,0,0,2)),x:num(d.x,0,-8,8),z:num(d.z,0,-8,8),r:num(d.r,0,-7,7)});}
+if(Array.isArray(raw.decor))for(const d of raw.decor){if(!d||typeof d!=='object')continue;const t=Math.floor(num(d.t,-1,-1,99));if(t<0||t>=DECOR.length)continue;if(s.decor.length>=72)break;s.decor.push({t,zone:Math.floor(num(d.zone,0,0,2)),x:num(d.x,0,-8,8),z:num(d.z,0,-8,8),r:num(d.r,0,-7,7)});}
 if(Array.isArray(raw.vis))for(let i=0;i<3;i++)s.vis[i]=Math.floor(num(raw.vis[i],0,0,1e6));
 if(raw.daily&&typeof raw.daily==='object'){s.daily.last=typeof raw.daily.last==='string'?raw.daily.last.slice(0,12):'';s.daily.streak=Math.floor(num(raw.daily.streak,0,0,99));}
 if(raw.dexClaim&&typeof raw.dexClaim==='object')for(const k in raw.dexClaim)if(raw.dexClaim[k]===1)s.dexClaim[k]=1;
@@ -289,8 +325,11 @@ s.cr.push({id:Math.floor(num(c.id,s.uid++,1,1e9)),sp,st:Math.floor(num(c.st,0,0,
 if(Array.isArray(raw.eggs))for(const e of raw.eggs){if(!e||typeof e!=='object')continue;const sp=Math.floor(num(e.sp,-1,-1,999));if(sp<0||sp>=SPN)continue;if(s.eggs.length>=12)break;s.eggs.push({sp,zone:Math.floor(num(e.zone,0,0,2)),ready:num(e.ready,Date.now(),0,Date.now()+1e10),big:e.big?1:0});}
 return s;
 }
+const slotKey=(i)=>CONFIG.save.slotKey[i];
+let SLOT=0;
+try{const q=Number(Store.get(CONFIG.save.lastKey));if(Number.isInteger(q)&&q>=0&&q<CONFIG.save.slots)SLOT=q;}catch(e){}
 let S;
-try{const raw=Store.get(CONFIG.save.key);S=sanitize(raw?JSON.parse(raw):null);}catch(e){S=defSave();}
+try{const raw=Store.get(slotKey(SLOT));S=sanitize(raw?JSON.parse(raw):null);}catch(e){S=defSave();}
 const isNew=S.cr.length===0&&S.eggs.length===0&&S.tut===0;
 
 const G={state:'boot',zone:S.zone,sel:null,gt:0,tod:S.tod,night:false,dayF:1,hint:'',needRender:true,session:{gold:0,hatch:0,evo:0,harvest:0,t:0},evo:null,evoQueue:[],camX:0,camZ:0,zoom:1,zoomT:1,shake:0,fps:60,drawCalls:0,hidden:false,lastSaveT:0,hudT:0,dispGold:S.gold,joyX:0,joyY:0};
@@ -624,9 +663,10 @@ if(gd.moving){gd.yaw=Math.atan2(gd.vx,gd.vz);gd.t+=h*10;gd.stepT-=h;if(gd.stepT<
 }
 function stepFixed(h){gardenerStep(h);for(let i=0;i<crs.length;i++){const c=crs[i];if(c.zone===G.zone)creatureStep(c,h);}separate();}
 
-const incomeOf=(c)=>CONFIG.econ.base[SP[c.sp].rar]*CONFIG.econ.stageMult[c.st]*(c.st===2?CONFIG.econ.varMult[c.va]:1)*(SP[c.sp].zone===c.zone?1:CONFIG.econ.offMult)*(c.hun>=CONFIG.econ.moodMin*100?1:0.5)*(1+Math.min(CONFIG.decor.maxBonus,zoneBonus[c.zone]));
+const incomeOf=(c)=>CONFIG.econ.base[SP[c.sp].rar]*CONFIG.econ.stageMult[c.st]*(c.st===2?CONFIG.econ.varMult[c.va]:1)*(SP[c.sp].zone===c.zone?1:CONFIG.econ.offMult)*(c.hun>=CONFIG.econ.moodMin*100?1:0.5)*(1+Math.min(CONFIG.decor.maxBonus,zoneBonus[c.zone]))*incMul();
 function econUpdate(dt){
-for(let i=0;i<crs.length;i++){const c=crs[i];if(c.state==='gone')continue;const inc=incomeOf(c);const cap=inc*CONFIG.econ.pendingCapSec;c.pend=Math.min(cap,c.pend+inc*dt);c.hun=Math.max(0,c.hun-CONFIG.creature.hungerDrain*dt);}
+tickContent(dt);
+for(let i=0;i<crs.length;i++){const c=crs[i];if(c.state==='gone')continue;const inc=incomeOf(c);const cap=inc*CONFIG.econ.pendingCapSec;c.pend=Math.min(cap,c.pend+inc*dt);c.hun=Math.max(0,c.hun-CONFIG.creature.hungerDrain*hunMul()*dt);}
 }
 function totalIncome(){let t=0;for(let i=0;i<crs.length;i++)t+=incomeOf(crs[i]);return t;}
 const xpNeed=(lv)=>Math.floor(CONFIG.prog.xpBase*Math.pow(CONFIG.prog.xpGrow,lv-1));
@@ -637,7 +677,7 @@ G.hudDirty=true;
 }
 function onLevelUp(){
 S.gold+=CONFIG.prog.lvGold*S.lv;S.seeds+=CONFIG.prog.lvSeeds;
-toast(tr('레벨 업! Lv.'+S.lv+' ㅋㅋ','Level up! Lv.'+S.lv),'gold');sfx('level');vib([30,40,30]);
+toast(tr('레벨 업! Lv.'+S.lv+'','Level up! Lv.'+S.lv),'gold');sfx('level');vib([30,40,30]);
 burst(zoneCx(G.zone)+gardener.x,1.5,gardener.z,26,0xffe27a,3.2,4);G.flash=0.5;
 for(let i=0;i<3;i++){if(!S.zones[i]&&S.lv>=CONFIG.zones[i].unlock){S.zones[i]=true;toast(tr('새 구역 열림: '+CONFIG.zones[i].ko,'New zone: '+CONFIG.zones[i].en),'good');buildTabs();}}
 }
@@ -687,12 +727,12 @@ return pool[0];
 const zoneCount=(z)=>{let n=0;for(let i=0;i<crs.length;i++)if(crs[i].zone===z)n++;for(let i=0;i<eggs.length;i++)if(eggs[i].zone===z)n++;return n;};
 function eggPrice(type){const n=crs.length+eggs.length;return Math.floor((type===0?CONFIG.econ.eggGold:CONFIG.econ.eggSeeds)*(1+CONFIG.econ.eggGrow*n));}
 function buyEgg(type){
-if(zoneCount(G.zone)>=CONFIG.zones[G.zone].cap){toast(tr('이 구역 꽉 찼어 ㅋㅋ 다른 구역 가봐','Zone is full lol, try another'),'bad');return false;}
+if(zoneCount(G.zone)>=CONFIG.zones[G.zone].cap){toast(tr('이 구역은 가득 찼어요. 다른 구역을 이용하세요','Zone is full. Try another one'),'bad');return false;}
 const price=eggPrice(type);
-if(type===0){if(S.gold<price){toast(tr('골드 부족 ㅋㅋ','Not enough gold lol'),'bad');return false;}S.gold-=price;}
-else{if(S.seeds<price){toast(tr('✨ 부족 ㅋㅋ','Not enough ✨ lol'),'bad');return false;}S.seeds-=price;}
-const rec={sp:rollSpecies(G.zone,type),zone:G.zone,ready:Date.now()+CONFIG.egg.hatchSec[type]*1000,big:type};
-const p=randSpot(G.zone);spawnEgg(rec,p[0],p[1]);G.hudDirty=true;toast(tr('알 샀다! 쓰다듬으면 빨리 깨 ㅋㅋ','Egg bought! Pet it to hatch faster lol'),'good');return true;
+if(type===0){if(S.gold<price){toast(tr('골드가 부족해요','Not enough gold'),'bad');return false;}S.gold-=price;}
+else{if(S.seeds<price){toast(tr('✨가 부족해요','Not enough ✨'),'bad');return false;}S.seeds-=price;}
+const rec={sp:rollSpecies(G.zone,type),zone:G.zone,ready:Date.now()+CONFIG.egg.hatchSec[type]*1000*hatchMul(),big:type};
+const p=randSpot(G.zone);spawnEgg(rec,p[0],p[1]);G.hudDirty=true;toast(tr('알을 구매했어요. 쓰다듬으면 더 빨리 부화해요','Egg bought. Petting it speeds up hatching'),'good');return true;
 }
 function spawnTutorialEgg(){const rec={sp:0,zone:0,ready:Date.now()+CONFIG.egg.tutorialSec*1000,big:0};const e=spawnEgg(rec,2.2,0.2);e.tut=true;return e;}
 function hatch(e){
@@ -706,7 +746,7 @@ floatText(tr('짠! 새 꼬물이','Ta-da!'),wx,2.6,z,'#fff2a0');
 S.stat.hatch++;G.session.hatch++;addXp(CONFIG.prog.hatchXp);
 if(S.stat.hatch===1){gainGold(CONFIG.reward.firstHatchGold);floatText('+'+CONFIG.reward.firstHatchGold+'🪙',wx,3.4,z,'#ffe27a');}
 checkAch();
-if(S.tut===0){S.tut=1;select(c);showHint(tr('밥 줘야 해 ㅋㅋ 풀잎빵 눌러봐','Feed it lol, tap the bread'));}
+if(S.tut===0){S.tut=1;select(c);showHint(tr('배고파 보이네요. 풀잎빵을 눌러 보세요','It looks hungry. Tap the bread'));}
 return c;
 }
 function tapEgg(e){
@@ -716,12 +756,12 @@ burst(wx,0.8,e.z,10,0xfff0a0,1.8,3);sfx('tap');vib(10);
 const now=Date.now();
 if(now>=e.ready){hatch(e);return;}
 e.ready-=CONFIG.egg.tapSkip*1000;
-if(Date.now()>=e.ready)hatch(e);else floatText(tr('톡톡 ㅋㅋ','tap tap'),wx,2.6,e.z,'#ffffff');
+if(Date.now()>=e.ready)hatch(e);else floatText(tr('톡톡','tap tap'),wx,2.6,e.z,'#ffffff');
 }
 
 function foodUse(c,fi){
 if(!c||c.state==='evolve'||c.state==='gone')return;
-if(S.food[fi]<=0){const pr=CONFIG.econ.foodPrice[fi];if(S.gold<pr){toast(tr('골드 없어서 못 사 ㅋㅋ','No gold lol'),'bad');return;}S.gold-=pr;S.food[fi]++;}
+if(S.food[fi]<=0){const pr=CONFIG.econ.foodPrice[fi];if(S.gold<pr){toast(tr('골드가 모자라요','Not enough gold'),'bad');return;}S.gold-=pr;S.food[fi]++;}
 S.food[fi]--;
 const fav=SP[c.sp].food===fi;
 c.hun=Math.min(CONFIG.creature.hungerMax,c.hun+CONFIG.creature.hungerFeed);
@@ -730,12 +770,12 @@ S.stat.feed++;addXp(CONFIG.prog.feedXp);
 enter(c,'eat',CONFIG.ai.eat);c.pop=1;sfx('eat');
 const wx=zoneCx(c.zone)+c.x;
 burst(wx,0.8,c.z,fav?22:10,fav?0xff7ab8:0xffe27a,2,3);
-floatText(fav?tr('최애다 ㅋㅋ ♥','Fave! ♥'):tr('냠냠','nom'),wx,c.topY*c.sc+1.5,c.z,fav?'#ff9ad0':'#ffffff');
+floatText(fav?tr('최애 간식 ♥','Fave! ♥'):tr('만족','nom'),wx,c.topY*c.sc+1.5,c.z,fav?'#ff9ad0':'#ffffff');
 G.hudDirty=true;checkAch();refreshPanel();checkEvo(c);
 }
 function toyUse(c,ti){
 if(!c||c.state==='evolve'||c.state==='gone')return;
-if(S.toy[ti]<=0){const pr=CONFIG.econ.toyPrice[ti];if(S.gold<pr){toast(tr('골드 없어서 못 사 ㅋㅋ','No gold lol'),'bad');return;}S.gold-=pr;S.toy[ti]++;}
+if(S.toy[ti]<=0){const pr=CONFIG.econ.toyPrice[ti];if(S.gold<pr){toast(tr('골드가 모자라요','Not enough gold'),'bad');return;}S.gold-=pr;S.toy[ti]++;}
 S.toy[ti]--;
 const fav=SP[c.sp].toy===ti;
 c.love+=fav?CONFIG.evo.loveFavToy:CONFIG.evo.loveToy;c.tp+=1;if(fav)c.ft++;
@@ -788,7 +828,7 @@ S.stat.evo++;G.session.evo++;
 const isNewForm=dexMark(c.sp,formIdx(c));
 addXp(CONFIG.prog.evoXp[c.st-1]);gainGold(CONFIG.reward.evoGold[c.st-1]);
 floatText(tr('진화!! '+spName(c.sp,c.st),'Evolved!! '+spName(c.sp,c.st)),wx,c.topY*c.sc+2,c.z,'#fff2a0');
-toast(tr(spName(c.sp,c.st)+'(으)로 진화 ㅋㅋ','Evolved into '+spName(c.sp,c.st)+' lol'),'good');
+toast(tr(spName(c.sp,c.st)+'(으)로 진화!','Evolved into '+spName(c.sp,c.st)+''),'good');
 if(isNewForm)toast(tr('도감에 새 모습 등록!','New dex entry!'),'good');
 if(S.stat.evo===1)firstEvoBomb(c);
 checkAch();refreshPanel();
@@ -797,10 +837,10 @@ if(G.evoQueue.length){const n=G.evoQueue.shift();if(n&&crs.indexOf(n)>=0&&canEvo
 function firstEvoBomb(c){
 const R=CONFIG.reward.firstEvo;
 at(0.4,()=>{gainGold(R.gold);toast(tr('첫 진화 보너스 +'+R.gold+'🪙','First evolution bonus +'+R.gold+'🪙'),'gold');});
-at(1.0,()=>{S.seeds+=R.seeds;G.hudDirty=true;toast(tr('반짝씨앗 +'+R.seeds+'✨ 공짜 ㅋㅋ','Free ✨ +'+R.seeds),'gold');});
+at(1.0,()=>{S.seeds+=R.seeds;G.hudDirty=true;toast(tr('반짝씨앗 +'+R.seeds+'✨ 지급','✨ +'+R.seeds),'gold');});
 at(1.6,()=>{for(let i=0;i<5;i++)S.food[i]+=R.food;for(let i=0;i<4;i++)S.toy[i]+=R.toy;toast(tr('먹이·장난감 상자 오픈!','Item box opened!'),'good');refreshPanel();});
 at(2.2,()=>{addXp(R.xp);toast(tr('첫 승리 보너스! 경험치 +'+R.xp,'First win bonus! XP +'+R.xp),'gold');});
-at(3.0,()=>{if(S.tut<2){S.tut=2;c.pend=CONFIG.reward.tutHarvestPend;showHint(tr('머리 위 동전 탭해서 수확 ㅋㅋ','Tap the coin above it to harvest lol'));}});
+at(3.0,()=>{if(S.tut<2){S.tut=2;c.pend=CONFIG.reward.tutHarvestPend;showHint(tr('머리 위 동전을 탭해 수확하세요','Tap the coin above it to harvest'));}});
 }
 function harvest(c,silent){
 if(!c||c.state==='gone')return 0;
@@ -809,14 +849,14 @@ c.pend-=n;gainGold(n);S.stat.harvest++;G.session.harvest++;addXp(CONFIG.prog.har
 const wx=zoneCx(c.zone)+c.x;
 if(!silent){sfx('coin');vib(12);floatText('+'+fmt(n)+'🪙',wx,c.topY*c.sc+1.8,c.z,'#ffe27a');burst(wx,c.topY*c.sc+0.8,c.z,14,0xffd54a,2.2,4);}
 c.pop=1;
-if(S.stat.harvest===1){const R=CONFIG.reward.firstHarvest;at(0.5,()=>{gainGold(R.gold);addXp(R.xp);toast(tr('첫 수확 보너스 +'+R.gold+'🪙','First harvest bonus +'+R.gold+'🪙'),'gold');});if(S.tut===2){S.tut=3;showHint(tr('알도 사서 정원 채워 ㅋㅋ','Buy more eggs lol'),CONFIG.fx.hintHide);$('btnShop').classList.add('pulse');}}
+if(S.stat.harvest===1){const R=CONFIG.reward.firstHarvest;at(0.5,()=>{gainGold(R.gold);addXp(R.xp);toast(tr('첫 수확 보너스 +'+R.gold+'🪙','First harvest bonus +'+R.gold+'🪙'),'gold');});if(S.tut===2){S.tut=3;showHint(tr('알을 더 사서 정원을 채워 보세요','Buy more eggs'),CONFIG.fx.hintHide);$('btnShop').classList.add('pulse');}}
 checkAch();return n;
 }
 function harvestAll(){
 let tot=0,cnt=0;
 for(let i=0;i<crs.length;i++){const c=crs[i];if(c.zone!==G.zone)continue;const n=harvest(c,true);if(n>0){tot+=n;cnt++;c.pop=1;}}
 if(cnt>0){sfx('coin');vib(20);const wx=zoneCx(G.zone)+gardener.x;floatText('+'+fmt(tot)+'🪙',wx,2.8,gardener.z,'#ffe27a');burst(wx,1.2,gardener.z,24,0xffd54a,3,5);}
-else toast(tr('수확할 거 없어 ㅋㅋ 기다려','Nothing to harvest lol'),'bad');
+else toast(tr('아직 수확할 게 없어요','Nothing to harvest yet'),'bad');
 }
 function petCreature(c){
 if(c.tapT>0)return;c.tapT=CONFIG.creature.tapCool;
@@ -831,7 +871,7 @@ checkEvo(c);
 function select(c){
 G.sel=c;
 const p=$('cPanel');
-if(c){p.classList.remove('hidden');$('joy').classList.add('hidden');refreshPanel(true);}
+if(c){say(c);p.classList.remove('hidden');$('joy').classList.add('hidden');refreshPanel(true);}
 else{p.classList.add('hidden');$('joy').classList.remove('hidden');}
 }
 const pn={name:null,stage:null,mood:null,love:null,evo:null,food:[],toy:[],lastSig:''};
@@ -862,7 +902,7 @@ for(let i=0;i<4;i++){const o=pn.toy[i];o.s.textContent=S.toy[i]>0?'x'+S.toy[i]:'
 function buildTabs(){
 const t=$('zoneTabs');t.innerHTML='';
 for(let i=0;i<3;i++){const z=CONFIG.zones[i];const open=S.zones[i];const b=el('button','btn'+(open?'':' lock')+(G.zone===i?' on':''),null,t);b.textContent=open?z.icon+' '+(LANG==='ko'?z.ko:z.en):'🔒 Lv.'+z.unlock;
-b.addEventListener('click',()=>{if(!S.zones[i]){toast(tr('Lv.'+z.unlock+'에 열려 ㅋㅋ','Opens at Lv.'+z.unlock),'bad');return;}if(G.state!=='play')return;switchZone(i);});}
+b.addEventListener('click',()=>{if(!S.zones[i]){toast(tr('Lv.'+z.unlock+'에 열려요','Opens at Lv.'+z.unlock),'bad');return;}if(G.state!=='play')return;switchZone(i);});}
 }
 function switchZone(z,quiet){
 if(z===G.zone)return;
@@ -891,7 +931,7 @@ const mk=(type,title,desc,price,icon)=>{const b=el('button','btn main',null,card
 mk(0,tr('보통 알','Normal Egg'),tr('이 구역 꼬물이 위주','Local critters mostly'),'🪙'+eggPrice(0),'🥚');
 mk(1,tr('반짝 알','Shiny Egg'),tr('희귀 확률 업','Rarer odds'),'✨'+eggPrice(1),'🔮');
 lostSection(card);
-el('div','sub',tr('알은 쓰다듬으면(탭) '+CONFIG.egg.tapSkip+'초씩 빨리 깨 ㅋㅋ','Tap eggs to hatch '+CONFIG.egg.tapSkip+'s faster lol'),card).style.margin='.4em 0';
+el('div','sub',tr('알은 쓰다듬으면(탭) '+CONFIG.egg.tapSkip+'초씩 빨리 부화해요','Tap eggs to hatch '+CONFIG.egg.tapSkip+'s faster'),card).style.margin='.4em 0';
 const cl=el('button','btn',null,card);cl.style.width='100%';el('span','',tr('닫기','Close'),cl);cl.addEventListener('click',closeModal);
 });
 }
@@ -1019,6 +1059,7 @@ const bulbMat=new THREE.MeshBasicMaterial({color:0xfff0a0});
 const starMat=new THREE.MeshBasicMaterial({color:0xffd54a});
 const glowTex=radialTex('rgba(255,225,140,1)');
 const dmesh=(g,geo,m,x,y,z,sx,sy,sz)=>{const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.scale.set(sx,sy,sz);o.castShadow=true;g.add(o);return o;};
+const flameMat=new THREE.MeshBasicMaterial({color:0xff8a1f}),flameMat2=new THREE.MeshBasicMaterial({color:0xffd54a});
 function buildDecor(t){
 const g=new THREE.Group(),o={g,blades:null,glow:null,star:null};
 switch(t){
@@ -1031,6 +1072,12 @@ case 5:{dmesh(g,GEO.box,dm(0xff9ac0),0,0.3,0,0.9,0.6,0.9);const r=dmesh(g,GEO.co
 case 6:dmesh(g,GEO.cyl,dm(0xf3e8d8),0,0.15,0,0.12,0.15,0.12);dmesh(g,GEO.sph,dm(0xe6504f),0,0.34,0,0.36,0.18,0.36);dmesh(g,GEO.sph,dm(0xffffff),0.14,0.46,0.06,0.07,0.04,0.07);dmesh(g,GEO.sph,dm(0xffffff),-0.1,0.45,-0.1,0.06,0.04,0.06);break;
 case 7:{dmesh(g,GEO.cone,dm(0xf0e0c0),0,0.75,0,0.42,0.75,0.42);const bl=new THREE.Group();bl.position.set(0,1.55,0.3);g.add(bl);for(let i=0;i<4;i++){const b=dmesh(bl,GEO.box,dm(i%2?0xe6504f:0xffd54a),-Math.sin(i*Math.PI/2)*0.4,Math.cos(i*Math.PI/2)*0.4,0,0.14,0.8,0.04);b.rotation.z=i*Math.PI/2;}o.blades=bl;break;}
 case 8:dmesh(g,GEO.sph,dm(0xff9ad0),0,0.14,0,0.5,0.16,0.5);dmesh(g,GEO.sph,dm(0xffe27a),0,0.28,0,0.1,0.05,0.1);break;
+case 10:dmesh(g,GEO.sph,dm(0x8d9399),0,0.2,0,0.5,0.32,0.42);dmesh(g,GEO.sph,dm(0x9aa0a6),0.3,0.12,0.15,0.28,0.2,0.26);dmesh(g,GEO.sph,dm(0x4cbf5a),-0.2,0.4,0,0.18,0.08,0.18);break;
+case 11:{for(const x of [-0.55,0.55])dmesh(g,GEO.cyl,dm(0xf3e8d8),x,0.55,0,0.07,0.55,0.07);for(let i=0;i<=6;i++){const a=i/6*Math.PI;dmesh(g,GEO.sph,dm(i%2?0xff7ab8:0xffd54a),Math.cos(a)*0.55,1.05+Math.sin(a)*0.35,0,0.13,0.13,0.13);}break;}
+case 12:dmesh(g,GEO.cyl,dm(0xc89a5a),0,0.4,0,0.5,0.04,0.5);dmesh(g,GEO.cyl,dm(0x8a5a36),0,0.2,0,0.06,0.2,0.06);dmesh(g,GEO.cyl,dm(0xffffff),0.14,0.5,0.06,0.09,0.07,0.09);dmesh(g,GEO.sph,dm(0xff9ac0),-0.16,0.52,0,0.14,0.12,0.14);break;
+case 13:{const l1=dmesh(g,GEO.box,dm(0x6a4328),0,0.1,0,0.7,0.1,0.12);l1.rotation.y=0.6;const l2=dmesh(g,GEO.box,dm(0x6a4328),0,0.1,0,0.7,0.1,0.12);l2.rotation.y=-0.6;dmesh(g,GEO.cone,flameMat,0,0.42,0,0.22,0.42,0.22);dmesh(g,GEO.cone,flameMat2,0,0.34,0,0.12,0.28,0.12);break;}
+case 14:dmesh(g,GEO.cyl,dm(0x3a3f4a),0,0.8,0,0.04,0.8,0.04);dmesh(g,GEO.sph,dm(0xe6504f),0,1.8,0,0.28,0.34,0.28);dmesh(g,GEO.sph,dm(0xffd54a),0.25,1.6,0.1,0.24,0.3,0.24);dmesh(g,GEO.sph,dm(0x5ab4ff),-0.22,1.55,-0.1,0.24,0.3,0.24);break;
+case 15:dmesh(g,GEO.cyl,dm(0xa8a8b8),0,0.12,0,0.4,0.12,0.4);o.star=dmesh(g,GEO.sph,dm(0xffcf3a),0,0.75,0,0.34,0.46,0.34);break;
 default:dmesh(g,GEO.cyl,dm(0xa8a8b8),0,0.2,0,0.4,0.2,0.4);o.star=dmesh(g,GEO.oct,starMat,0,0.95,0,0.32,0.32,0.32);break;
 }
 return o;
@@ -1081,7 +1128,7 @@ if(G.state!=='play'||G.evo)return;
 deco.on=true;deco.type=-1;deco.sel=null;select(null);
 $('dPanel').classList.remove('hidden');$('joy').classList.add('hidden');$('bar').classList.add('hidden');
 if(!dUI.built){buildDecoPanel();dUI.built=true;}
-refreshDecoPanel();showHint(tr('고르고 땅을 탭해서 놓아 ㅋㅋ','Pick one, tap the ground'),CONFIG.fx.hintHide);
+refreshDecoPanel();showHint(tr('아이템을 고르고 땅을 탭해 배치하세요','Pick one, tap the ground'),CONFIG.fx.hintHide);
 }
 function closeDeco(){
 deco.on=false;deco.type=-1;deco.sel=null;
@@ -1095,13 +1142,13 @@ if(best){deco.sel=best;deco.type=-1;refreshDecoPanel();sfx('tap');return;}
 if(deco.type<0){deco.sel=null;refreshDecoPanel();return;}
 if(!r.intersectPlane(plane,_v3))return;
 const lx=Math.round((_v3.x-zoneCx(G.zone))*2)/2,lz=Math.round(_v3.z*2)/2;
-if(Math.abs(lx)>lim||Math.abs(lz)>lim){toast(tr('밖이야 ㅋㅋ','Out of bounds lol'),'bad');return;}
+if(Math.abs(lx)>lim||Math.abs(lz)>lim){toast(tr('정원 밖이에요','Out of bounds'),'bad');return;}
 const D=DECOR[deco.type];
-if(decoCount(G.zone)>=CONFIG.decor.cap){toast(tr('이 구역 꽉 찼어','Zone decor is full'),'bad');return;}
+if(decoCount(G.zone)>=CONFIG.decor.cap){toast(tr('이 구역의 장식 공간이 가득 찼어요','Zone decor is full'),'bad');return;}
 const o=Z[G.zone].obst;
-for(let i=0;i<o.length;i++){const dx=lx-o[i].x,dz=lz-o[i].z,rr=o[i].r+D.r*0.8;if(dx*dx+dz*dz<rr*rr){toast(tr('겹쳤어 ㅋㅋ','Overlapping lol'),'bad');sfx('err');return;}}
-if(D.gem){if(S.seeds<D.gem){toast(tr('✨ 부족 ㅋㅋ','Not enough ✨'),'bad');return;}S.seeds-=D.gem;}
-else{if(S.gold<D.price){toast(tr('골드 부족 ㅋㅋ','Not enough gold'),'bad');return;}S.gold-=D.price;}
+for(let i=0;i<o.length;i++){const dx=lx-o[i].x,dz=lz-o[i].z,rr=o[i].r+D.r*0.8;if(dx*dx+dz*dz<rr*rr){toast(tr('다른 물체와 겹쳐요','Overlapping'),'bad');sfx('err');return;}}
+if(D.gem){if(S.seeds<D.gem){toast(tr('✨가 부족해요','Not enough ✨'),'bad');return;}S.seeds-=D.gem;}
+else{if(S.gold<D.price){toast(tr('골드가 부족해요','Not enough gold'),'bad');return;}S.gold-=D.price;}
 const d=addDecor({t:deco.type,zone:G.zone,x:lx,z:lz,r:0});deco.sel=d;deco.type=-1;
 S.stat.deco++;G.hudDirty=true;sfx('pop');vib(15);burst(zoneCx(G.zone)+lx,0.5,lz,14,0xfff0a0,2,3);
 refreshDecoPanel();checkAch();
@@ -1136,7 +1183,7 @@ function spawnVisitor(type){
 let rig=vis.rigs[type];if(!rig){rig=buildVisitorRig(type);vis.rigs[type]=rig;}
 vis.e={type,zone:G.zone,x:-lim-0.6,z:rnd(-lim*0.6,lim*0.6),tx:rnd(-2,2),tz:rnd(-2,2),state:'enter',t:0,rig,yaw:0};
 rig.g.visible=true;sfx('visit');
-toast(tr('손님 왔다! '+VISITORS[type].ko+' ㅋㅋ','A guest! '+VISITORS[type].en),'good');
+toast(tr('손님 도착: '+VISITORS[type].ko,'Guest arrived: '+VISITORS[type].en),'good');
 }
 function updateVisitors(dt){
 let e=vis.e;
@@ -1153,7 +1200,7 @@ const dx=tx-e.x,dz=tz-e.z,d=Math.sqrt(dx*dx+dz*dz);
 if(d<0.15){if(e.state==='enter'){e.state='stay';e.t=rnd(CONFIG.visitor.stay[0],CONFIG.visitor.stay[1]);}else{rig.g.visible=false;rig.bubble.visible=false;vis.e=null;return;}}
 else{const st=Math.min(d,CONFIG.visitor.speed*dt);e.x+=dx/d*st;e.z+=dz/d*st;e.yaw=Math.atan2(dx,dz);}
 }else{
-e.t-=dt;if(e.t<=0){e.state='leave';toast(tr('손님 갔다 ㅠㅠ 다음엔 빨리 탭해','The guest left...'),'bad');}
+e.t-=dt;if(e.t<=0){e.state='leave';toast(tr('손님이 떠났어요. 다음에는 빨리 탭해 보세요','The guest left. Tap faster next time'),'bad');}
 }
 const show=e.zone===G.zone;rig.g.visible=show;
 rig.g.position.set(zoneCx(e.zone)+e.x,e.state==='stay'?0:Math.abs(Math.sin(G.gt*8))*0.1,e.z);rig.g.rotation.y=e.yaw;
@@ -1205,7 +1252,7 @@ for(const m of CONFIG.dex.milestones){
 const claimed=S.dexClaim[m.n]===1,ok=n>=m.n;
 const b=el('button','btn'+(ok&&!claimed?' main':''),null,ms);
 b.style.minHeight='48px';el('span','',(claimed?'✔ ':'')+m.n+' → 🪙'+fmt(m.g)+' ✨'+m.s,b);
-b.addEventListener('click',()=>{if(claimed)return;if(!ok){toast(tr(m.n+'개 모아야 해 ㅋㅋ','Need '+m.n+' forms lol'),'bad');return;}S.dexClaim[m.n]=1;gainGold(m.g);S.seeds+=m.s;G.hudDirty=true;sfx('level');toast(tr('도감 보상 +🪙'+fmt(m.g)+' ✨'+m.s,'Dex reward +🪙'+fmt(m.g)+' ✨'+m.s),'gold');renderDexList(card);});
+b.addEventListener('click',()=>{if(claimed)return;if(!ok){toast(tr(m.n+'개를 모아야 해요','Need '+m.n+' forms'),'bad');return;}S.dexClaim[m.n]=1;gainGold(m.g);S.seeds+=m.s;G.hudDirty=true;sfx('level');toast(tr('도감 보상 +🪙'+fmt(m.g)+' ✨'+m.s,'Dex reward +🪙'+fmt(m.g)+' ✨'+m.s),'gold');renderDexList(card);});
 }
 const vr=el('div','sub',null,card);vr.style.margin='.5em 0';
 vr.textContent=tr('손님 도감: ','Guests: ')+VISITORS.map((v,i)=>(S.vis[i]>0?(LANG==='ko'?v.ko:v.en)+' x'+S.vis[i]:'???')).join(' · ');
@@ -1214,7 +1261,7 @@ for(let i=0;i<SPN;i++){
 const seen=spSeen(i);const b=el('button','btn dcell'+(seen?'':' off'),null,grid);
 const sw=el('i','',null,b);sw.style.background='hsl('+SP[i].hue+',66%,64%)';
 el('span','',seen?spName(i,0):'???',b);
-b.addEventListener('click',()=>{if(seen)renderDexDetail(card,i);else toast(tr('아직 못 만났어 ㅋㅋ','Not met yet lol'),'bad');});
+b.addEventListener('click',()=>{if(seen)renderDexDetail(card,i);else toast(tr('아직 만나지 못한 꼬물이예요','Not met yet'),'bad');});
 }
 const cl=el('button','btn',null,card);cl.style.cssText='width:100%;margin-top:.7em';el('span','',tr('닫기','Close'),cl);cl.addEventListener('click',closeModal);
 }
@@ -1256,7 +1303,7 @@ function checkDaily(){
 const now=new Date(),tk=dkey(now);if(S.daily.last===tk)return;
 const y=new Date(now.getTime()-86400000);let streak=S.daily.last===dkey(y)?S.daily.streak+1:1;if(streak>7)streak=1;
 openModal((card)=>{
-el('h3','',tr('출석 체크 ㅋㅋ ('+streak+'일차)','Daily Check-in (Day '+streak+')'),card);
+el('h3','',tr('출석 체크 ('+streak+'일차)','Daily Check-in (Day '+streak+')'),card);
 const grid=el('div','dgrid',null,card);grid.style.gridTemplateColumns='repeat(4,1fr)';
 for(let i=0;i<7;i++){const R=CONFIG.daily[i];const b=el('div','btn dcell'+(i+1===streak?' on':''),null,grid);b.style.pointerEvents='none';if(i+1<streak)b.style.opacity='.5';
 el('span','',(i+1)+tr('일','d'),b);el('span','',(R.g?'🪙'+R.g:'')+(R.s?' ✨'+R.s:'')+(R.f?' 🍞x'+R.f:'')+(R.t?' 🔔x'+R.t:'')+(R.egg?' 🥚':''),b);}
@@ -1265,23 +1312,23 @@ b.addEventListener('click',()=>{
 const R=CONFIG.daily[streak-1];
 if(R.g)gainGold(R.g);if(R.s)S.seeds+=R.s;if(R.f)for(let i=0;i<5;i++)S.food[i]+=R.f;if(R.t)for(let i=0;i<4;i++)S.toy[i]+=R.t;
 if(R.egg&&zoneCount(G.zone)<CONFIG.zones[G.zone].cap){const p=randSpot(G.zone);spawnEgg({sp:rollSpecies(G.zone,1),zone:G.zone,ready:Date.now()+CONFIG.egg.hatchSec[1]*1000*0.3,big:1},p[0],p[1]);}
-S.daily.last=tk;S.daily.streak=streak;G.hudDirty=true;sfx('level');toast(tr('출석 보상 받음 ㅋㅋ','Check-in reward claimed'),'gold');checkAch();closeModal();
+S.daily.last=tk;S.daily.streak=streak;G.hudDirty=true;sfx('level');toast(tr('출석 보상을 받았어요','Check-in reward claimed'),'gold');checkAch();closeModal();
 });
 });
 }
 
-const AD_LINES=[['광고 보는 중… 꼬물이 기다리는 중 ㅋㅋ','Watching an ad… critter is waiting lol'],['이 광고는 진짜가 아니라 괜찮아 ㅋㅋ','This ad is fake, relax lol'],['건너뛰기 버튼이 낯을 가려 ㅋㅋ','The skip button is shy lol']];
+const AD_LINES=[['광고 시청 중… 꼬물이가 기다리고 있어요','Watching an ad… your critter is waiting'],['이 광고는 가짜입니다. 안심하세요','This ad is fake. Do not panic'],['건너뛰기 버튼이 도망 다니는 건 정상입니다','The skip button running away is working as intended']];
 const adEl={sc:$('scAd'),skip:$('adSkip'),cnt:$('adCount'),ttl:$('adTitle'),give:$('adGive'),quit:$('adQuit'),timer:0,t:0,res:null,dodge:0};
 function adClose(ok){clearInterval(adEl.timer);adEl.sc.classList.add('hidden');const r=adEl.res;adEl.res=null;if(r)r(ok);}
 function adDodge(){
 adEl.dodge++;
 adEl.skip.style.left=rnd(4,66).toFixed(0)+'%';adEl.skip.style.top=rnd(8,78).toFixed(0)+'%';
-if(adEl.dodge===CONFIG.ad.dodgeMsg){adEl.ttl.textContent=tr('못 잡지? ㅋㅋ 5초만 참아','Can\'t catch it? Just wait 5s');}
+if(adEl.dodge===CONFIG.ad.dodgeMsg){adEl.ttl.textContent=tr('잡기 어렵죠? 5초만 버티세요','Hard to catch? Just wait 5s');}
 sfx('tap');
 }
 function adTick(){
 adEl.t-=0.1;
-if(adEl.t<=0){clearInterval(adEl.timer);adEl.cnt.textContent='✔';adEl.skip.classList.add('hidden');adEl.give.classList.remove('hidden');adEl.ttl.textContent=tr('다 봤다! 보상 받아가 ㅋㅋ','Done! Take your reward lol');sfx('level');return;}
+if(adEl.t<=0){clearInterval(adEl.timer);adEl.cnt.textContent='✔';adEl.skip.classList.add('hidden');adEl.give.classList.remove('hidden');adEl.ttl.textContent=tr('시청 완료! 보상을 받으세요','Done! Take your reward');sfx('level');return;}
 adEl.cnt.textContent=String(Math.ceil(adEl.t));
 }
 function showRewardAd(placement){
@@ -1304,15 +1351,15 @@ adEl.quit.addEventListener('click',()=>adClose(false));
 
 function openFleePopup(rec){
 openModal((card)=>{
-el('h3','',tr('꼬물이가 가출함 ㅋㅋ','A critter ran away lol'),card);
-el('div','sub',tr(spName(rec.sp,rec.st)+'(이)가 짐 싸서 나갔대. 광고 보면 돌아온대 ㅋㅋ','"'+spName(rec.sp,rec.st)+'" packed up and left. Watch an ad and it comes back, apparently lol'),card).style.marginBottom='.7em';
+el('h3','',tr('꼬물이가 가출했어요','A critter ran away'),card);
+el('div','sub',tr(spName(rec.sp,rec.st)+'(이)가 짐을 싸서 나갔어요. 광고를 보면 돌아올지도 몰라요','"'+spName(rec.sp,rec.st)+'" packed up and left. Watch an ad and it may come back'),card).style.marginBottom='.7em';
 const b1=el('button','btn main',null,card);b1.style.cssText='width:100%;margin-bottom:.5em';el('span','',tr('📺 광고 보고 데려오기','📺 Watch ad to bring back'),b1);
 b1.addEventListener('click',()=>{closeModal();reviveWithAd(rec);});
 const b2=el('button','btn',null,card);b2.style.width='100%';el('span','',tr('잘 가 ㅂㅂ (나중에 데려올 수 있음)','Bye bye (can fetch later)'),b2);b2.addEventListener('click',closeModal);
 });
 }
 function reviveWithAd(rec){
-showRewardAd('revive').then((ok)=>{if(ok)reviveCreature(rec);else toast(tr('광고 포기 ㅋㅋ 아직 밖에 있대','Ad skipped, still out there'),'bad');});
+showRewardAd('revive').then((ok)=>{if(ok)reviveCreature(rec);else toast(tr('광고를 건너뛰었어요. 아직 밖에 있어요','Ad skipped, still out there'),'bad');});
 }
 function reviveCreature(rec){
 const i=S.lost.indexOf(rec);if(i<0)return;S.lost.splice(i,1);
@@ -1320,7 +1367,7 @@ rec.hun=CONFIG.creature.hungerMax;rec.pend=0;
 const p=randSpot(rec.zone);const c=makeCreature(rec,p[0],p[1]);c.pop=1;enter(c,'cheer',2);
 c.rig.g.visible=c.zone===G.zone;
 S.stat.ad++;burst(zoneCx(c.zone)+p[0],1,p[1],30,0xfff0a0,3,4);sfx('hatch');
-toast(tr('돌아왔다 ㅋㅋ 광고 본 보람 있네','It came back lol, worth the ad'),'good');checkAch();
+toast(tr('돌아왔어요. 광고 본 보람이 있네요','It came back. Worth the ad'),'good');checkAch();
 }
 function lostSection(card){
 if(!S.lost.length)return;
@@ -1334,7 +1381,7 @@ b.addEventListener('click',()=>{closeModal();reviveWithAd(rec);});
 function canFlee(){return G.state==='play'&&!G.evo&&!G.invincible&&S.tut>=3&&G.session.t>CONFIG.flee.minPlaySec;}
 function startFlee(c){
 enter(c,'flee',CONFIG.flee.runSec);c.tx=(Math.random()<0.5?1:-1)*(lim+8);c.tz=c.z;
-floatText(tr('나 갈래!!','I\'m out!!'),zoneCx(c.zone)+c.x,c.topY*c.sc+1.6,c.z,'#ff9aa8');toast(tr('꼬물이가 도망간다 ㅋㅋ','A critter is running away lol'),'bad');sfx('flee');
+floatText(tr('떠납니다!','I am leaving!'),zoneCx(c.zone)+c.x,c.topY*c.sc+1.6,c.z,'#ff9aa8');toast(tr('꼬물이가 도망치고 있어요','A critter is running away'),'bad');sfx('flee');
 }
 function updateFlee(dt){
 G.fleeT-=dt;
@@ -1357,10 +1404,10 @@ at(0.3,()=>{if(G.state==='play'&&!modalOpen)openFleePopup(rec);});
 const gath={t:0,on:false,cd:0};
 function startGather(){
 if(G.state!=='play'||G.evo||deco.on)return;
-if(gath.cd>0){toast(tr('아직 숨 고르는 중 ㅋㅋ','Catching breath lol'),'bad');return;}
+if(gath.cd>0){toast(tr('재정비 중이에요','Recovering'),'bad');return;}
 const list=[];
 for(let i=0;i<crs.length;i++){const c=crs[i];if(c.zone===G.zone&&c.state!=='evolve'&&c.state!=='gone'&&c.state!=='flee')list.push(c);}
-if(list.length<2){toast(tr('모일 친구가 없어 ㅋㅋ','Not enough friends lol'),'bad');return;}
+if(list.length<2){toast(tr('모일 꼬물이가 부족해요','Not enough critters'),'bad');return;}
 gath.on=true;gath.t=CONFIG.gather.dur;gath.cd=CONFIG.gather.cooldown;
 const GC=CONFIG.gather;
 for(let i=0;i<list.length;i++){
@@ -1417,7 +1464,7 @@ if(ST.quality!=='auto')return;
 const order=['high','mid','low'],i=order.indexOf(G.autoLevel);
 if(i<0||i>=order.length-1)return;
 G.autoLevel=order[i+1];applyQuality();
-toast(tr('폰이 힘들대 ㅋㅋ 그래픽 낮춤','Phone is sweating lol, lowering graphics'),'bad');
+toast(tr('성능 저하 감지: 그래픽 품질을 낮췄어요','Performance drop detected: lowering graphics'),'bad');
 }
 function applyJoy(){
 const j=$('joy'),flip=ST.joyFlip||ST.oneHand;
@@ -1434,7 +1481,7 @@ const ui=$('ui');ui.classList.toggle('onehand',ST.oneHand);ui.classList.toggle('
 applyJoy();applyVolumes();applyQuality();
 if(prevLang!==LANG){
 root.lang=LANG;applyLang();buildTabs();dUI.built=false;if(G.sel)refreshPanel(true);
-if(G.state==='title')$('titleSub').textContent=isNewGame()?tr('귀여운 걸 키우는 정원 ㅋㅋ','A garden of tiny critters lol'):tr('꼬물이들이 기다리고 있었대 ㅋㅋ','Your critters were waiting lol');
+if(G.state==='title')$('titleSub').textContent=isNewGame()?tr('작고 수상한 생명체들의 정원','A garden of small, suspicious creatures'):tr('꼬물이들이 기다리고 있었어요. 티는 안 내지만요.','Your critters were waiting. They will deny it.');
 }
 $('titleKeys').textContent=('ontouchstart' in window)?'':keysLine();
 if(!ST.fps&&!DEBUG)$('fps').classList.add('hidden');
@@ -1523,7 +1570,7 @@ b.textContent=tr('키를 눌러…','Press a key…');b.classList.add('main');
 G.rebind=(e)=>{
 G.rebind=null;
 if(e.code==='Escape'){renderSettings(card);return;}
-if(e.code==='KeyF'||e.code==='Tab'){toast(tr('예약된 키야 ㅋㅋ','Reserved key lol'),'bad');renderSettings(card);return;}
+if(e.code==='KeyF'||e.code==='Tab'){toast(tr('예약된 키예요','Reserved key'),'bad');renderSettings(card);return;}
 for(const o of KEYACT){if(o!==a&&ST.keys[o]===e.code){ST.keys[o]=ST.keys[a];}}
 ST.keys[a]=e.code;saveSettings();applySettings();renderSettings(card);
 };
@@ -1531,7 +1578,7 @@ ST.keys[a]=e.code;saveSettings();applySettings();renderSettings(card);
 }
 ssec(card,tr('기타','Etc'));
 sseg(card,tr('언어','Language'),'lang',[['ko','한국어'],['en','English']],()=>{applySettings();renderSettings(card);});
-const rc=srow(card,tr('촬영 모드','Capture mode')),bc=el('button','btn',tr('켜기','Start'),rc);bc.addEventListener('click',()=>{if(G.state!=='play'){toast(tr('플레이 중에만 돼 ㅋㅋ','Only while playing lol'),'bad');return;}closeModal();enterCapture();});
+const rc=srow(card,tr('촬영 모드','Capture mode')),bc=el('button','btn',tr('켜기','Start'),rc);bc.addEventListener('click',()=>{if(G.state!=='play'){toast(tr('플레이 중에만 사용할 수 있어요','Only available while playing'),'bad');return;}closeModal();enterCapture();});
 const rk=srow(card,tr('단축키 안내','Key guide')),bk=el('button','btn',tr('보기','Open'),rk);bk.addEventListener('click',()=>renderKeyGuide(card));
 ssec(card,tr('세이브','Save data'));
 const re=srow(card,tr('세이브 내보내기','Export save')),be=el('button','btn',tr('내보내기','Export'),re);be.addEventListener('click',()=>renderExport(card));
@@ -1554,7 +1601,7 @@ const text=b64e(JSON.stringify(S));
 const ta=el('textarea','sv',null,card);ta.value=text;ta.readOnly=true;
 const row=el('div','row',null,card);
 const bc=el('button','btn main',tr('복사','Copy'),row);
-bc.addEventListener('click',()=>{ta.select();let ok=false;try{ok=document.execCommand('copy');}catch(e){}if(!ok&&navigator.clipboard){navigator.clipboard.writeText(text).then(()=>toast(tr('복사됨','Copied'),'good')).catch(()=>{});}else toast(ok?tr('복사됨','Copied'):tr('길게 눌러 직접 복사해 ㅋㅋ','Copy it manually lol'),ok?'good':'bad');});
+bc.addEventListener('click',()=>{ta.select();let ok=false;try{ok=document.execCommand('copy');}catch(e){}if(!ok&&navigator.clipboard){navigator.clipboard.writeText(text).then(()=>toast(tr('복사됨','Copied'),'good')).catch(()=>{});}else toast(ok?tr('복사됨','Copied'):tr('길게 눌러 직접 복사해 주세요','Copy it manually'),ok?'good':'bad');});
 const bf=el('button','btn',tr('파일로 저장','Save file'),row);
 bf.addEventListener('click',()=>{try{const blob=new Blob([text],{type:'text/plain'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='kkomuri-garden-save.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}catch(e){toast(tr('저장 실패','Failed'),'bad');}});
 const b=el('button','btn',tr('돌아가기','Back'),card);b.style.cssText='width:100%;margin-top:.8em';b.addEventListener('click',()=>renderSettings(card));
@@ -1565,8 +1612,8 @@ text=String(text||'').trim();if(!text)throw 0;
 let obj;try{obj=JSON.parse(text);}catch(e){obj=JSON.parse(b64d(text));}
 if(!obj||typeof obj!=='object'||obj.v!==CONFIG.save.ver)throw 0;
 const clean=sanitize(obj);
-Store.set(CONFIG.save.key,JSON.stringify(clean));G.noSave=true;location.reload();
-}catch(e){toast(tr('세이브가 이상해 ㅋㅋ 못 불러와','Invalid save data'),'bad');}
+Store.set(slotKey(SLOT),JSON.stringify(clean));G.noSave=true;location.reload();
+}catch(e){toast(tr('세이브 데이터가 올바르지 않아요','Invalid save data'),'bad');}
 }
 function renderImport(card){
 card.innerHTML='';el('h3','',tr('세이브 가져오기','Import save'),card);
@@ -1580,11 +1627,11 @@ const ba=el('button','btn main',tr('적용(덮어쓰기)','Apply (overwrite)'),r
 const b=el('button','btn',tr('돌아가기','Back'),card);b.style.cssText='width:100%;margin-top:.8em';b.addEventListener('click',()=>renderSettings(card));
 }
 function renderReset(card){
-card.innerHTML='';el('h3','',tr('정말 지울 거야?','Really reset?'),card);
-el('div','sub',tr('꼬물이·골드·도감 전부 사라져 ㅠㅠ 설정은 남아.','All critters, gold and dex will be gone. Settings stay.'),card).style.marginBottom='.8em';
+card.innerHTML='';el('h3','',tr('정말 초기화할까요?','Really reset?'),card);
+el('div','sub',tr('선택한 슬롯의 꼬물이·골드·도감이 모두 사라집니다. 설정은 유지됩니다.','All critters, gold and dex in this slot will be gone. Settings stay.'),card).style.marginBottom='.8em';
 const r=el('div','row',null,card);
 const bn=el('button','btn main',tr('취소','Cancel'),r);bn.addEventListener('click',()=>renderSettings(card));
-const by=el('button','btn danger',tr('전부 삭제','Delete all'),r);by.addEventListener('click',()=>{Store.del(CONFIG.save.key);G.noSave=true;location.reload();});
+const by=el('button','btn danger',tr('전부 삭제','Delete all'),r);by.addEventListener('click',()=>{Store.del(slotKey(SLOT));G.noSave=true;location.reload();});
 }
 $('btnSetTitle').addEventListener('click',openSettings);
 $('btnSetPause').addEventListener('click',openSettings);
@@ -1654,6 +1701,196 @@ add(tr('강제 진화','Evolve'),()=>{const c=crs.find(c=>c.st<2&&c.zone===G.zon
 const inv=add(tr('무적: OFF','Invincible: OFF'),()=>{G.invincible=!G.invincible;inv.firstChild.textContent=tr('무적: ','Invincible: ')+(G.invincible?'ON':'OFF');});
 add(tr('30분 시뮬','Sim 30m'),()=>{simulate(1800);toast('sim 30m done','good');});
 }
+
+const BUF={t:0,m:1,ko:'',en:''};
+const MISSIONS=[
+{k:'harvest',n:15,g:120,s:0,ko:'수확 15회',en:'Harvest 15 times'},
+{k:'feed',n:8,g:60,s:1,ko:'먹이 8번 주기',en:'Feed critters 8 times'},
+{k:'hatch',n:2,g:150,s:0,ko:'알 2개 부화',en:'Hatch 2 eggs'},
+{k:'play',n:6,g:100,s:0,ko:'장난감으로 6번 놀아주기',en:'Play with toys 6 times'},
+{k:'tap',n:30,g:80,s:0,ko:'꼬물이 30번 쓰다듬기',en:'Pet critters 30 times'},
+{k:'evo',n:1,g:0,s:2,ko:'진화 1회',en:'Evolve once'},
+{k:'gather',n:1,g:100,s:0,ko:'모여라 1회',en:'Use Gather once'},
+{k:'deco',n:2,g:90,s:0,ko:'장식 2개 배치',en:'Place 2 decor items'},
+{k:'earned',n:3000,g:0,s:2,ko:'골드 3,000 벌기',en:'Earn 3,000 gold'},
+{k:'visit',n:1,g:100,s:1,ko:'손님 1회 맞이',en:'Welcome a guest'}
+];
+const UPS=[
+{e:'🧪',ko:'비료 연구',en:'Fertilizer Lab',dk:'수익 +8% / 레벨',de:'Income +8% / level'},
+{e:'📦',ko:'대형 창고',en:'Bigger Storage',dk:'방치 수익 보관 +1시간 / 레벨',de:'Idle cap +1h / level'},
+{e:'🔥',ko:'부화기 개량',en:'Incubator Tuning',dk:'부화 시간 -7% / 레벨',de:'Hatch time -7% / level'},
+{e:'🍯',ko:'영양 간식 연구',en:'Snack Research',dk:'배고픔 속도 -8% / 레벨',de:'Hunger rate -8% / level'}
+];
+const RANKS=[[1,'정원 수습','Garden Intern'],[3,'새싹 관리인','Sprout Keeper'],[5,'꼬물이 집사','Critter Butler'],[8,'정원 책임자','Garden Chief'],[12,'공인 꼬물 전문가','Certified Critter Expert'],[16,'전설의 정원사','Legendary Gardener']];
+const rankName=()=>{let r=RANKS[0];for(let i=0;i<RANKS.length;i++)if(S.lv>=RANKS[i][0])r=RANKS[i];return tr(r[1],r[2]);};
+const incMul=()=>(BUF.t>0?BUF.m:1)*(1+S.up[0]*CONFIG.content.upEff[0]);
+const hunMul=()=>1-S.up[3]*CONFIG.content.upEff[3];
+const hatchMul=()=>1-S.up[2]*CONFIG.content.upEff[2];
+const offExtra=()=>S.up[1]*CONFIG.content.upEff[1];
+const upCost=(i)=>Math.floor(CONFIG.content.upCost[i][0]*Math.pow(CONFIG.content.upCost[i][1],S.up[i]));
+function dmEnsure(){
+const k=dkey(new Date());
+if(S.dm.k===k&&S.dm.pick.length===3)return;
+let h=0;for(let i=0;i<k.length;i++)h=(Math.imul(h,31)+k.charCodeAt(i))>>>0;
+const pool=[];for(let i=0;i<MISSIONS.length;i++)pool.push(i);
+const pick=[];for(let i=0;i<3;i++){h=(Math.imul(h,1103515245)+12345)>>>0;const j=(h>>>8)%pool.length;pick.push(pool[j]);pool.splice(j,1);}
+S.dm.k=k;S.dm.pick=pick;S.dm.cl=[0,0,0];S.dm.bonus=0;S.dm.base={};for(const q in S.stat)S.dm.base[q]=S.stat[q];
+}
+const dmProg=(m)=>Math.min(m.n,Math.max(0,Math.floor(S.stat[m.k]-(S.dm.base[m.k]||0))));
+const dmGold=(m)=>Math.floor(m.g*(1+S.lv*0.15));
+function dmClaimable(){dmEnsure();let n=0;for(let i=0;i<3;i++){const m=MISSIONS[S.dm.pick[i]];if(!S.dm.cl[i]&&dmProg(m)>=m.n)n++;}if(!S.dm.bonus&&S.dm.cl[0]&&S.dm.cl[1]&&S.dm.cl[2])n++;return n;}
+function openBook(tab){
+if(G.state!=='play')return;
+openModal((card)=>renderBook(card,tab||0));
+}
+function renderBook(card,tab){
+card.innerHTML='';
+el('h3','',rankName()+' · Lv.'+S.lv,card);
+const tabs=el('div','row',null,card);tabs.style.marginTop='0';
+const names=[tr('미션','Missions'),tr('정원 개선','Upgrades'),tr('업적','Awards')];
+for(let i=0;i<3;i++){const b=el('button','btn'+(i===tab?' on':''),names[i],tabs);b.addEventListener('click',()=>renderBook(card,i));}
+const list=el('div','',null,card);list.style.marginTop='.6em';
+if(tab===0){
+dmEnsure();
+for(let i=0;i<3;i++){
+const m=MISSIONS[S.dm.pick[i]],pr=dmProg(m),done=pr>=m.n,cl=S.dm.cl[i];
+const r=el('div','setrow',null,list);
+const t=el('span','',(LANG==='ko'?m.ko:m.en)+'  ('+(m.k==='earned'?fmt(pr)+'/'+fmt(m.n):pr+'/'+m.n)+')',r);
+const rw=(m.g?'🪙'+fmt(dmGold(m)):'')+(m.s?' ✨'+m.s:'');
+const b=el('button','btn'+(done&&!cl?' main':''),cl?'✔':rw,r);b.disabled=!done||!!cl;
+b.addEventListener('click',()=>{if(S.dm.cl[i])return;S.dm.cl[i]=1;gainGold(dmGold(m));S.seeds+=m.s;addXp(15);S.stat.mission++;G.hudDirty=true;sfx('level');toast(tr('미션 완료: '+rw,'Mission complete: '+rw),'gold');checkAch();renderBook(card,0);refreshBookBtn();});
+}
+const bb=el('div','setrow',null,list);el('span','',tr('3개 모두 완료 보너스','All three bonus'),bb);
+const allDone=S.dm.cl[0]&&S.dm.cl[1]&&S.dm.cl[2];
+const bn=el('button','btn'+(allDone&&!S.dm.bonus?' main':''),S.dm.bonus?'✔':'✨3',bb);bn.disabled=!allDone||!!S.dm.bonus;
+bn.addEventListener('click',()=>{if(S.dm.bonus)return;S.dm.bonus=1;S.seeds+=3;G.hudDirty=true;sfx('level');toast(tr('보너스 ✨3 지급','Bonus ✨3 granted'),'gold');renderBook(card,0);refreshBookBtn();});
+el('div','sub',tr('미션은 매일 새로 바뀌어요.','Missions refresh every day.'),list).style.marginTop='.5em';
+}else if(tab===1){
+for(let i=0;i<4;i++){
+const U=UPS[i],lv=S.up[i],mx=CONFIG.content.upMax[i];
+const r=el('div','setrow',null,list);
+const t=el('span','',U.e+' '+(LANG==='ko'?U.ko:U.en)+' Lv.'+lv+'/'+mx+'\n'+(LANG==='ko'?U.dk:U.de),r);t.style.whiteSpace='pre-line';t.style.fontSize='.9em';
+if(lv>=mx){el('b','','MAX',r);}
+else{const c=upCost(i);const b=el('button','btn'+(S.gold>=c?' main':''),'🪙'+fmt(c),r);b.disabled=S.gold<c;b.addEventListener('click',()=>{const cc=upCost(i);if(S.up[i]>=mx||S.gold<cc)return;S.gold-=cc;S.up[i]++;S.stat.up++;G.hudDirty=true;sfx('level');toast(tr(U.ko+' Lv.'+S.up[i],U.en+' Lv.'+S.up[i]),'good');checkAch();renderBook(card,1);});}
+}
+}else{
+let n=0;for(let i=0;i<ACH.length;i++)if(S.ach[ACH[i].id])n++;
+el('div','sub',tr('달성 ','Unlocked ')+n+' / '+ACH.length,list).style.marginBottom='.3em';
+for(let i=0;i<ACH.length;i++){const a=ACH[i],ok=!!S.ach[a.id];const r=el('div','sumrow',null,list);r.style.opacity=ok?'1':'.55';el('span','',(ok?'✔ ':'🔒 ')+(LANG==='ko'?a.ko:a.en),r);}
+}
+const cb=el('button','btn',tr('닫기','Close'),card);cb.style.cssText='width:100%;margin-top:.7em';cb.addEventListener('click',closeModal);
+}
+function refreshBookBtn(){const n=dmClaimable();$('btnBook').classList.toggle('pulse',n>0);}
+$('btnBook').addEventListener('click',()=>openBook(0));
+const EVENTS=['rain','fest','snack','meteor'];
+const EV={t:rnd(CONFIG.content.eventGap[0],CONFIG.content.eventGap[1]),kind:'',life:0,acc:0};
+const bufBox=$('buffs');
+const bufChip=el('div','chip hidden',null,bufBox);
+const evBtn=el('button','btn hidden',null,bufBox);evBtn.style.minHeight='max(48px,3em)';
+function clearMeteor(){EV.kind='';evBtn.classList.add('hidden');}
+evBtn.addEventListener('click',()=>{
+if(EV.kind!=='meteor')return;
+const C=CONFIG.content,n=C.meteorSeeds[0]+Math.floor(Math.random()*(C.meteorSeeds[1]-C.meteorSeeds[0]+1));
+S.seeds+=n;S.stat.event++;G.hudDirty=true;clearMeteor();sfx('level');toast(tr('별똥별에 소원을 빌었어요. ✨'+n,'Wish made on a shooting star. ✨'+n),'gold');checkAch();
+});
+function fireEvent(k){
+const C=CONFIG.content;S.stat.event++;
+if(k==='rain'){BUF.t=C.rain.t;BUF.m=C.rain.m;BUF.ko='☔ 단비 수익 x'+C.rain.m;BUF.en='☔ Rain: income x'+C.rain.m;toast(tr('단비가 내려요. 수익이 늘어납니다.','Rain is falling. Income is up.'),'good');sfx('pop');}
+else if(k==='fest'){BUF.t=C.fest.t;BUF.m=C.fest.m;BUF.ko='🎉 풍년제 수익 x'+C.fest.m;BUF.en='🎉 Harvest fest: income x'+C.fest.m;toast(tr('풍년제가 열렸어요. 수익이 크게 늘어납니다.','Harvest festival! Income way up.'),'good');sfx('level');}
+else if(k==='snack'){for(let i=0;i<crs.length;i++){const c=crs[i];if(c.state==='gone')continue;c.hun=Math.min(CONFIG.creature.hungerMax,c.hun+C.snackHun);c.love+=2;}toast(tr('간식 수레가 지나갔어요. 모두 배가 찼어요.','A snack cart passed by. Everyone is full.'),'good');sfx('pop');}
+else{EV.kind='meteor';EV.life=C.meteorLife;evBtn.classList.remove('hidden');toast(tr('별똥별이 떨어져요. 서둘러 소원을 빌어 보세요.','A shooting star! Make a wish quickly.'),'gold');sfx('ach');}
+}
+function refreshChips(){
+if(BUF.t>0){bufChip.classList.remove('hidden');bufChip.textContent=(LANG==='ko'?BUF.ko:BUF.en)+' '+Math.ceil(BUF.t)+'s';}else bufChip.classList.add('hidden');
+if(EV.kind==='meteor'){evBtn.textContent='☄ '+tr('소원 빌기','Make a wish')+' '+Math.ceil(EV.life)+'s';evBtn.classList.add('pulse');}
+refreshBookBtn();
+}
+function tickContent(dt){
+if(BUF.t>0){BUF.t-=dt;if(BUF.t<=0){BUF.t=0;BUF.m=1;}}
+if(G.state!=='play'||S.tut<3)return;
+EV.t-=dt;
+if(EV.t<=0){EV.t=rnd(CONFIG.content.eventGap[0],CONFIG.content.eventGap[1]);if(!EV.kind&&!modalOpen&&!G.evo){const k=EVENTS[Math.floor(Math.random()*EVENTS.length)];fireEvent(k);}}
+if(EV.kind==='meteor'){EV.life-=dt;if(EV.life<=0)clearMeteor();}
+EV.acc+=dt;if(EV.acc>=0.5){EV.acc=0;refreshChips();}
+}
+const QUOTES=[
+[['오늘도 평온하군요.','Calm day, as expected.'],['급할 건 없어요.','No rush.'],['수확은 제가 알아서 합니다.','I handle the harvest myself.'],['햇볕이 적당하네요.','Decent sunlight.'],['조용히 성장 중이에요.','Growing quietly.']],
+[['사실 제가 이 정원의 주인입니다.','I am, technically, the owner here.'],['사진은 왼쪽이 잘 나와요.','My left side photographs better.'],['곧 전설이 될 예정입니다.','Future legend. On schedule.'],['박수는 사양합니다. 아니, 받겠습니다.','No applause. Actually, applause is fine.'],['진화하면 많이 달라질 겁니다.','I will look very different later.']],
+[['5분만 더 누워 있을게요.','Five more minutes.'],['일은 내일의 제가 합니다.','Tomorrow-me will handle it.'],['움직이는 건 비효율적이에요.','Moving is inefficient.'],['낮잠도 업무의 연장입니다.','Napping counts as work.'],['수익은 가만히 있어도 나옵니다.','Income arrives on its own.']],
+[['손 치우세요. 아니, 조금만 더.','Hands off. Okay, a little more.'],['간식이 늦어요.','The snack is late.'],['쓰다듬는 각도가 별로네요.','Poor petting angle.'],['방금 눈 마주친 거 기억해 둘게요.','I will remember that eye contact.'],['불만은 없습니다. 의견은 많지만요.','No complaints. Plenty of opinions.']],
+[['저 구름, 먹을 수 있을까요?','Can that cloud be eaten?'],['땅을 파면 뭐가 나올까요?','What is under the ground?'],['버섯과 대화해 본 적 있어요?','Ever talked to a mushroom?'],['이 정원엔 비밀이 있어요.','This garden has secrets.'],['질문이 있었는데 까먹었어요.','I had a question. Forgot it.']],
+[['오늘 제일 좋은 순간이에요.','Best moment of my day.'],['더 해주셔도 됩니다.','You may continue.'],['당신 편이에요. 간식이 있는 한.','I am on your side. Snacks permitting.'],['조금 더 가까이 와도 돼요.','You can come a bit closer.'],['오셨네요. 기다린 건 아니고요.','Oh, you came. Not that I waited.']]
+];
+function say(c){const q=QUOTES[c.sp%6][Math.floor(Math.random()*5)];$('cSay').textContent='“'+tr(q[0],q[1])+'”';}
+
+ACH.push(
+{id:'cr12',ko:'꼬물이 12마리',en:'Twelve Critters',f:()=>crs.length>=12},
+{id:'cr20',ko:'꼬물이 20마리',en:'Twenty Critters',f:()=>crs.length>=20},
+{id:'evo3x',ko:'최종 진화 3마리',en:'Three Final Forms',f:()=>crs.filter(c=>c.st===2).length>=3},
+{id:'evo10',ko:'누적 진화 10회',en:'10 Evolutions',f:()=>S.stat.evo>=10},
+{id:'har100',ko:'누적 수확 100회',en:'100 Harvests',f:()=>S.stat.harvest>=100},
+{id:'har1k',ko:'누적 수확 1,000회',en:'1,000 Harvests',f:()=>S.stat.harvest>=1000},
+{id:'earn50k',ko:'누적 5만 골드',en:'Earn 50K',f:()=>S.stat.earned>=50000},
+{id:'earn500k',ko:'누적 50만 골드',en:'Earn 500K',f:()=>S.stat.earned>=500000},
+{id:'dex40',ko:'도감 40칸',en:'Dex 40',f:()=>formCount()>=40},
+{id:'dex80',ko:'도감 80칸',en:'Dex 80',f:()=>formCount()>=80},
+{id:'zone3',ko:'모든 구역 개척',en:'All Zones Open',f:()=>S.zones[1]&&S.zones[2]},
+{id:'deco10',ko:'장식 10개 배치',en:'10 Decor Placed',f:()=>S.stat.deco>=10},
+{id:'visit10',ko:'손님 10회 맞이',en:'10 Guests',f:()=>S.stat.visit>=10},
+{id:'gather5',ko:'모여라 5회',en:'Gather x5',f:()=>S.stat.gather>=5},
+{id:'mis5',ko:'미션 5회 완료',en:'5 Missions',f:()=>S.stat.mission>=5},
+{id:'mis30',ko:'미션 30회 완료',en:'30 Missions',f:()=>S.stat.mission>=30},
+{id:'up5',ko:'정원 개선 5회',en:'5 Upgrades',f:()=>S.stat.up>=5},
+{id:'ev5',ko:'이벤트 5회 경험',en:'5 Events',f:()=>S.stat.event>=5},
+{id:'lv10',ko:'정원 레벨 10',en:'Garden Lv.10',f:()=>S.lv>=10},
+{id:'lv20',ko:'정원 레벨 20',en:'Garden Lv.20',f:()=>S.lv>=20},
+{id:'streak7',ko:'7일 연속 출석',en:'7-Day Streak',f:()=>S.daily.streak>=7},
+{id:'ad3',ko:'광고 부활 3회',en:'3 Ad Revives',f:()=>S.stat.ad>=3}
+);
+const pad2=(n)=>(n<10?'0':'')+n;
+function slotInfo(i){
+let raw=null;try{raw=Store.get(slotKey(i));}catch(e){}
+if(!raw)return null;
+let o;try{o=JSON.parse(raw);}catch(e){return null;}
+if(!o||typeof o!=='object'||o.v!==CONFIG.save.ver)return null;
+const s=sanitize(o);
+if(s.cr.length===0&&s.eggs.length===0&&s.tut===0)return null;
+let dx=0;for(const k in s.dex)dx++;
+return {lv:s.lv,cr:s.cr.length,dex:dx,gold:s.gold,t:s.t};
+}
+let delArm=-1,delTm=0;
+function pickSlot(i){
+if(typeof audioUnlock==='function')audioUnlock();
+if(i===SLOT){startPlay();return;}
+saveNow();Store.set(CONFIG.save.lastKey,String(i));G.noSave=true;
+try{sessionStorage.setItem('kk_auto','1');}catch(e){}
+location.reload();
+}
+function delSlot(i){
+if(delArm!==i){delArm=i;clearTimeout(delTm);delTm=setTimeout(()=>{delArm=-1;renderSlots();},3000);renderSlots();return;}
+clearTimeout(delTm);delArm=-1;Store.del(slotKey(i));
+if(i===SLOT){G.noSave=true;location.reload();return;}
+renderSlots();
+}
+function renderSlots(){
+const box=$('slotList');box.innerHTML='';
+for(let i=0;i<CONFIG.save.slots;i++){
+const inf=slotInfo(i);
+const row=el('div','slot'+(i===SLOT?' cur':''),null,box);row.setAttribute('data-i',String(i));
+const main=el('button','slotMain',null,row);main.setAttribute('data-i',String(i));
+el('b','',tr('슬롯 ','Slot ')+(i+1)+(inf?'  ·  '+(()=>{let r=RANKS[0];for(let k=0;k<RANKS.length;k++)if(inf.lv>=RANKS[k][0])r=RANKS[k];return tr(r[1],r[2]);})():''),main);
+if(inf){const d=new Date(inf.t);el('span','',tr('Lv.','Lv.')+inf.lv+'  ·  '+tr('꼬물이 ','Critters ')+inf.cr+'  ·  '+tr('도감 ','Dex ')+inf.dex+'  ·  🪙'+fmt(inf.gold)+'\n'+(d.getMonth()+1)+'/'+d.getDate()+' '+pad2(d.getHours())+':'+pad2(d.getMinutes()),main).style.whiteSpace='pre-line';}
+else el('span','',tr('비어 있음 — 새 게임 시작','Empty — start a new game'),main);
+main.addEventListener('click',()=>pickSlot(i));
+if(inf){const d=el('button','btn slotDel',delArm===i?tr('정말?','Sure?'):'🗑',row);d.classList.toggle('danger',delArm===i);d.addEventListener('click',()=>delSlot(i));}
+}
+}
+function showSlots(on){
+$('titleMain').classList.toggle('hidden',!!on);
+$('slotBox').classList.toggle('hidden',!on);
+if(on)renderSlots();
+}
+$('btnSlotBack').addEventListener('click',()=>showSlots(false));
 
 const ptr=new Map();
 let tapStart=null;
@@ -1755,13 +1992,13 @@ S.t=Date.now();S.tod=G.tod;S.zone=G.zone;
 S.cr.length=0;
 for(let i=0;i<crs.length;i++){const c=crs[i];if(c.state==='gone')continue;S.cr.push({id:c.id,sp:c.sp,st:c.st,va:c.va,zone:c.zone,hun:c.hun,love:c.love,feeds:c.feeds,ff:c.ff,ft:c.ft,fp:c.fp,tp:c.tp,pend:c.pend});}
 S.eggs.length=0;for(let i=0;i<eggs.length;i++){const e=eggs[i];S.eggs.push({sp:e.sp,zone:e.zone,ready:e.ready,big:e.big});}
-saveExtra();Store.set(CONFIG.save.key,JSON.stringify(S));
+saveExtra();Store.set(slotKey(SLOT),JSON.stringify(S));Store.set(CONFIG.save.lastKey,String(SLOT));
 }catch(e){}
 }
 function applyOffline(){
 const el_=(Date.now()-S.t)/1000;
 if(!(el_>CONFIG.econ.offlineMinSec))return null;
-const sec=Math.min(el_,CONFIG.econ.offlineCapSec);
+const sec=Math.min(el_,CONFIG.econ.offlineCapSec+offExtra());
 const gold=Math.floor(totalIncome()*sec*CONFIG.econ.offlineRate);
 G.tod=(G.tod+sec/CONFIG.time.cycleSec)%1;
 return {sec,gold,raw:el_};
@@ -1783,7 +2020,8 @@ if(s==='play'){reqWake();G.pausedAt=0;}
 G.needRender=true;
 }
 function showTitle(){
-$('titleSub').textContent=isNewGame()?tr('귀여운 걸 키우는 정원 ㅋㅋ','A garden of tiny critters lol'):tr('꼬물이들이 기다리고 있었대 ㅋㅋ','Your critters were waiting lol');
+showSlots(false);
+$('titleSub').textContent=isNewGame()?tr('작고 수상한 생명체들의 정원','A garden of small, suspicious creatures'):tr('꼬물이들이 기다리고 있었어요. 티는 안 내지만요.','Your critters were waiting. They will deny it.');
 setState('title');
 }
 const isNewGame=()=>S.tut===0&&S.cr.length===0&&S.eggs.length===0;
@@ -1793,19 +2031,19 @@ if(G.state!=='title')return;
 setState('play');
 if(offlineInfo&&offlineInfo.gold>0){gainGold(offlineInfo.gold);openOfflineModal(offlineInfo);}
 offlineInfo=null;
-if(S.tut===0){spawnTutorialEgg();showHint(tr('알을 톡 쳐봐! 빨리 깨 ㅋㅋ','Tap the egg! It hatches faster lol'));}
+if(S.tut===0){spawnTutorialEgg();showHint(tr('알을 탭하세요. 빨리 부화해요','Tap the egg. It hatches faster'));}
 else if(S.tut===1&&!crs.length&&!eggs.length){S.tut=3;}
-else if(S.tut===1){const c=crs[0];if(c)select(c);showHint(tr('풀잎빵 눌러봐 ㅋㅋ','Tap the bread lol'));}
-else if(S.tut===2){showHint(tr('머리 위 동전 탭해서 수확 ㅋㅋ','Tap the coin above it lol'));}
+else if(S.tut===1){const c=crs[0];if(c)select(c);showHint(tr('풀잎빵을 눌러 보세요','Tap the bread'));}
+else if(S.tut===2){showHint(tr('머리 위 동전을 탭해 수확하세요','Tap the coin above it'));}
 if(S.tut>=3)checkDaily();
 }
 function openOfflineModal(info){
 openModal((card)=>{
-el('h3','',tr('내가 없는 사이에 ㅋㅋ','While you were away lol'),card);
+el('h3','',tr('자리를 비운 사이','While you were away'),card);
 const m=Math.floor(info.sec/60);
 const r1=el('div','sumrow',null,card);el('span','',tr('자리 비운 시간','Away'),r1);el('b','',m>=60?Math.floor(m/60)+tr('시간 ','h ')+(m%60)+tr('분','m'):m+tr('분','m'),r1);
 const r2=el('div','sumrow',null,card);el('span','',tr('방치 수익','Idle income'),r2);el('b','','🪙'+fmt(info.gold),r2);
-const b=el('button','btn main',null,card);b.style.cssText='width:100%;margin-top:.7em';el('span','',tr('꿀꺽 받기','Take it'),b);b.addEventListener('click',closeModal);
+const b=el('button','btn main',null,card);b.style.cssText='width:100%;margin-top:.7em';el('span','',tr('받기','Take it'),b);b.addEventListener('click',closeModal);
 });
 }
 function showResult(){
@@ -1816,7 +2054,7 @@ for(const r of rows){const d=el('div','sumrow',null,rc);el('span','',r[0],d);el(
 const b=el('button','btn main',null,rc);b.style.cssText='width:100%;margin-top:.7em';el('span','',tr('타이틀로','To Title'),b);b.addEventListener('click',()=>{G.session.gold=G.session.hatch=G.session.evo=G.session.harvest=G.session.t=0;showTitle();});
 setState('result');
 }
-$('btnStart').addEventListener('click',()=>{if(audioUnlock)audioUnlock();startPlay();});
+$('btnStart').addEventListener('click',()=>{if(audioUnlock)audioUnlock();showSlots(true);});
 $('btnPause').addEventListener('click',()=>{if(G.state==='play')setState('pause');});
 $('btnResume').addEventListener('click',()=>{setState('play');});
 $('btnExit').addEventListener('click',()=>{select(null);showResult();});
@@ -1992,11 +2230,12 @@ gardener.x=0;gardener.z=2;G.camX=0;G.camZ=2;
 buildTabs();hudCache.gold=-1;
 updateHud(1);
 G.dispGold=S.gold;
-setState('intro');
+let auto=false;try{auto=sessionStorage.getItem('kk_auto')==='1';sessionStorage.removeItem('kk_auto');}catch(e){}
+if(auto){setState('title');startPlay();}else setState('intro');
 lastTs=0;rafId=requestAnimationFrame(frame);
 }
 boot();
-if(location.search.indexOf('debug=1')>=0)window.__dbg={saveSettings,update,simulate,Q,ST,fpsMonitor,applySettings,openSettings,enterCapture,exitCapture,detectLevel,G,S,crs,eggs,AUD,decs,deco,vis,gath,dex,CONFIG,SP,spawnVisitor,claimVisitor,startFlee,startGather,openDex,showRewardAd,checkDaily,addDecor,openDeco,sfx,reapGone,openModal,closeModal,decoTap,gardener,hatch,tapEgg,foodUse,toyUse,harvest,harvestAll,select,cam,V,renderer,startPlay,setState,switchZone,checkEvo,canEvo,addXp,gainGold,toast,openShop,buyEgg,toScreen:(x,z,y)=>{const v=new THREE.Vector3(zoneCx(G.zone)+x,y||0.5,z).project(cam);return [(v.x+1)/2*V.w,(1-v.y)/2*V.h];}};
+if(location.search.indexOf('debug=1')>=0)window.__dbg={openBook,fireEvent,BUF,EV,MISSIONS,pickSlot,slotInfo,showSlots,dmEnsure,dmClaimable,SLOT,slotKey,saveSettings,update,simulate,Q,ST,fpsMonitor,applySettings,openSettings,enterCapture,exitCapture,detectLevel,G,S,crs,eggs,AUD,decs,deco,vis,gath,dex,CONFIG,SP,spawnVisitor,claimVisitor,startFlee,startGather,openDex,showRewardAd,checkDaily,addDecor,openDeco,sfx,reapGone,openModal,closeModal,decoTap,gardener,hatch,tapEgg,foodUse,toyUse,harvest,harvestAll,select,cam,V,renderer,startPlay,setState,switchZone,checkEvo,canEvo,addXp,gainGold,toast,openShop,buyEgg,toScreen:(x,z,y)=>{const v=new THREE.Vector3(zoneCx(G.zone)+x,y||0.5,z).project(cam);return [(v.x+1)/2*V.w,(1-v.y)/2*V.h];}};
 </script>
 </body>
 </html>
