@@ -1674,6 +1674,7 @@ const e=$('fps'),inf=renderer.info;e.classList.remove('hidden');
 e.textContent=Math.round(G.fps)+' fps · '+(1000/Math.max(1,G.fps)).toFixed(1)+' ms'+(DEBUG?'\nDC '+G.drawCalls+' · tri '+inf.render.triangles+' · geo '+inf.memory.geometries+' · tex '+inf.memory.textures+' · pr '+V.pr.toFixed(2)+' · '+Q.level:'');
 }
 function resumeOffline(){
+if(G.state!=='play'&&G.state!=='pause')return;
 const info=applyOffline();
 S.t=Date.now();
 if(info&&info.gold>0&&crs.length){gainGold(info.gold);openOfflineModal(info);}
