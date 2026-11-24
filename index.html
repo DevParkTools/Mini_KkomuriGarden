@@ -1123,8 +1123,8 @@ for(let k=0;k<LAMPS.length;k++){
 const lx=LAMPS[k][0],lz=LAMPS[k][1];
 const pole=new THREE.Mesh(GEO.cyl,pm);pole.position.set(lx,0.9,lz);pole.scale.set(0.05,0.9,0.05);pole.castShadow=true;g.add(pole);
 const bulb=new THREE.Mesh(GEO.sph,bulbMat);bulb.position.set(lx,1.9,lz);bulb.scale.setScalar(0.17);g.add(bulb);
-const gl=new THREE.Sprite(lampGlowMat);gl.scale.set(2.6,2.6,1);gl.position.set(lx,1.9,lz);g.add(gl);
-const pl=new THREE.Mesh(poolGeo,poolMat);pl.position.set(lx,0.07,lz);pl.scale.setScalar(6.2);g.add(pl);
+const gl=new THREE.Sprite(lampGlowMat);gl.scale.set(1.8,1.8,1);gl.position.set(lx,1.9,lz);g.add(gl);
+const pl=new THREE.Mesh(poolGeo,poolMat);pl.position.set(lx,0.07,lz);pl.scale.setScalar(4.6);g.add(pl);
 }
 }
 }
@@ -1137,7 +1137,7 @@ switch(t){
 case 0:dmesh(g,GEO.cyl,dm(0xc8683a),0,0.18,0,0.3,0.18,0.3);dmesh(g,GEO.sph,dm(0x4cbf5a),0,0.5,0,0.3,0.26,0.3);dmesh(g,GEO.sph,dm(0xff7ab8),0.14,0.66,0.05,0.09,0.09,0.09);dmesh(g,GEO.sph,dm(0xffd54a),-0.12,0.6,-0.08,0.09,0.09,0.09);dmesh(g,GEO.sph,dm(0xffffff),0,0.72,-0.1,0.08,0.08,0.08);break;
 case 1:for(const x of [-0.45,0,0.45])dmesh(g,GEO.box,dm(0xc89a5a),x,0.28,0,0.08,0.56,0.08);dmesh(g,GEO.box,dm(0xd8aa6a),0,0.22,0,1,0.07,0.05);dmesh(g,GEO.box,dm(0xd8aa6a),0,0.42,0,1,0.07,0.05);break;
 case 2:dmesh(g,GEO.box,dm(0xb07a4a),0,0.32,0,0.95,0.08,0.36);dmesh(g,GEO.box,dm(0x8a5a36),-0.38,0.16,0,0.08,0.32,0.3);dmesh(g,GEO.box,dm(0x8a5a36),0.38,0.16,0,0.08,0.32,0.3);dmesh(g,GEO.box,dm(0xb07a4a),0,0.58,-0.16,0.95,0.3,0.06);break;
-case 3:{dmesh(g,GEO.cyl,dm(0x3a3f4a),0,0.9,0,0.05,0.9,0.05);dmesh(g,GEO.sph,bulbMat,0,1.9,0,0.16,0.16,0.16);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:0}));s.scale.set(2.6,2.6,1);s.position.y=1.9;g.add(s);o.glow=s;const pl=new THREE.Mesh(poolGeo,poolMat);pl.position.y=0.07;pl.scale.setScalar(6.2);g.add(pl);break;}
+case 3:{dmesh(g,GEO.cyl,dm(0x3a3f4a),0,0.9,0,0.05,0.9,0.05);dmesh(g,GEO.sph,bulbMat,0,1.9,0,0.16,0.16,0.16);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:0}));s.scale.set(1.8,1.8,1);s.position.y=1.9;g.add(s);o.glow=s;const pl=new THREE.Mesh(poolGeo,poolMat);pl.position.y=0.07;pl.scale.setScalar(4.6);g.add(pl);break;}
 case 4:dmesh(g,GEO.cyl,dm(0x9aa3ad),0,0.15,0,0.85,0.15,0.85);dmesh(g,GEO.cyl,dm(0x5ab4ff),0,0.31,0,0.68,0.03,0.68);dmesh(g,GEO.cyl,dm(0xb8c0c8),0,0.55,0,0.12,0.4,0.12);dmesh(g,GEO.sph,dm(0x7acaff),0,1,0,0.2,0.2,0.2);break;
 case 5:{dmesh(g,GEO.box,dm(0xff9ac0),0,0.3,0,0.9,0.6,0.9);const r=dmesh(g,GEO.cone,dm(0xe6504f),0,0.85,0,0.78,0.34,0.78);r.rotation.y=Math.PI/4;dmesh(g,GEO.box,dm(0x7a4a36),0,0.2,0.46,0.22,0.4,0.03);break;}
 case 6:dmesh(g,GEO.cyl,dm(0xf3e8d8),0,0.15,0,0.12,0.15,0.12);dmesh(g,GEO.sph,dm(0xe6504f),0,0.34,0,0.36,0.18,0.36);dmesh(g,GEO.sph,dm(0xffffff),0.14,0.46,0.06,0.07,0.04,0.07);dmesh(g,GEO.sph,dm(0xffffff),-0.1,0.45,-0.1,0.06,0.04,0.06);break;
@@ -1175,7 +1175,7 @@ function updateDecor(dt){
 const nf=1-G.dayF;
 for(let i=0;i<decs.length;i++){
 const d=decs[i];if(d.zone!==G.zone)continue;
-if(d.o.glow)d.o.glow.material.opacity=nf*0.95;
+if(d.o.glow)d.o.glow.material.opacity=nf*0.5;
 if(d.o.blades)d.o.blades.rotation.z+=dt*2;
 if(d.o.star)d.o.star.rotation.y+=dt*1.6;
 const s=d===deco.sel?1+Math.sin(G.gt*8)*0.04:1;d.o.g.scale.setScalar(s);
@@ -2477,7 +2477,7 @@ const dusk=1-Math.abs(h)*4;const dk=clamp(dusk,0,1)*0.8;
 _c1.copy(SKY_NIGHT).lerp(SKY_DAY,G.dayF).lerp(SKY_DUSK,dk*0.55);
 scene.background.copy(_c1);renderer.setClearColor(_c1);
 hemi.intensity=lerp(CONFIG.lights.nightHemi,CONFIG.lights.dayHemi,G.dayF);
-lampGlowMat.opacity=(1-G.dayF)*0.9;poolMat.opacity=(1-G.dayF)*0.6;
+lampGlowMat.opacity=(1-G.dayF)*0.45;poolMat.opacity=(1-G.dayF)*0.22;
 hemi.color.copy(HEMI_SKY_N).lerp(HEMI_SKY_D,G.dayF);
 sun.intensity=lerp(CONFIG.lights.nightSun,CONFIG.lights.daySun,G.dayF);
 sun.color.copy(SUN_NIGHT).lerp(SUN_DAY,G.dayF);
